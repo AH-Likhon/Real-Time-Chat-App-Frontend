@@ -27,7 +27,7 @@ const Register = () => {
         if(e.target.files.length !== 0){
             setState({
                 ...state,
-                [e.target.name] : e.target.value
+                [e.target.name] : e.target.files[0]
             })
         }
 
@@ -41,20 +41,21 @@ const Register = () => {
     };
 
     const handleSubmit = e => {
-        const { userName, email, password, confirmPassword, image } = state;
 
-        const formData = new FormData();
+        // const { userName, email, password, confirmPassword, image } = state;
 
-        formData.append('userName', userName);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('confirmPassword', confirmPassword);
-        formData.append('image', image);
+        // const formData = new FormData();
 
-        dispatch(userRegister(formData));
+        // formData.append('userName', userName);
+        // formData.append('email', email);
+        // formData.append('password', password);
+        // formData.append('confirmPassword', confirmPassword);
+        // formData.append('image', image);
 
-        e.preventDefault();
-        // console.log(state);
+        dispatch(userRegister(state));
+
+        console.log(state);
+        e.preventDefault();        
     }
 
     return (

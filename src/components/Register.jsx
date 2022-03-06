@@ -1,31 +1,85 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { userRegister } from '../store/actions/auth';
+import React,{useState,useEffect} from 'react'
+import { Link } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
+import { userRegister } from "../store/actions/authAction";
+// import { useAlert } from "react-alert";
+// import { SUCCESS_MESSAGE_CLEAR,ERROR_CLEAR } from "../store/types/authType";
+// const Register = ({history}) => {
 
-const Register = () => {
+const Register = ({history}) => {
+
+    // const alert = useAlert();
+    // const {loading,successMessage,error,authenticate,myInfo} = useSelector(state=>state.auth);
+
+    // console.log(myInfo);
+
     const dispatch = useDispatch();
 
-    const [state, setState] = useState({
-        userName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        image: ''
+    const [state,setstate] = useState({
+        userName : '',
+        email : '',
+        password : '',
+        confirmPassword : '',
+        image : ''
     });
 
-    const [image, setImage] = useState('');
+    const [loadImage,setLoadImage] = useState('');
 
-    const inputHandle = e => {
-        setState({
+    const inputHendle = (e) =>{
+        setstate({
             ...state,
             [e.target.name] : e.target.value
         })
-    };
+    }
 
-    const fileHandle = e => {
+    const fileHendle = e =>{
         if(e.target.files.length !== 0){
-            setState({
+
+            // function getBase64(file) {
+            //     return new Promise((resolve, reject) => {
+            //       const reader = new FileReader();
+            //       reader.readAsDataURL(file);
+            //       reader.onload = () => resolve(reader.result);
+            //       reader.onerror = error => reject(error);
+            //     });
+            //   }
+
+            // let base64Image = getBase64(e.target.files[0]).then(
+            //     data => data
+            //   );
+
+            // function getDataUrl(img) {
+            //     // Create canvas
+            //     const canvas = document.createElement('canvas');
+            //     const ctx = canvas.getContext('2d');
+            //     // Set width and height
+            //     canvas.width = img.width;
+            //     canvas.height = img.height;
+            //     // Draw the image
+            //     ctx.drawImage(img, 0, 0);
+            //     return canvas.toDataURL('image/*');
+            //  }
+             
+            //  const dataUrl = getDataUrl(e.target.files[0]);
+            //  console.log(dataUrl);
+
+            // function encodeImageFileAsURL(e) {
+            //     const file = e.target.files[0];
+            //     const reader = new FileReader();
+            //     reader.readAsDataURL(file);
+            //     reader.onloadend = () => {
+            //         return reader.result;
+            //     } 
+                    
+            //     //   console.log('RESULT', reader.result);
+            //     // console.log('RESULT', reader.result);
+            //   }
+
+            //   console.log(encodeImageFileAsURL(e));
+
+            //   console.log("Result", e.target.name);
+
+            setstate({
                 ...state,
                 [e.target.name] : e.target.files[0]
             })
@@ -33,30 +87,59 @@ const Register = () => {
 
         const reader = new FileReader();
 
-        reader.onload = () => {
-            setImage(reader.result);
+        reader.onload = () =>{
+            setLoadImage(reader.result);
         }
 
+
         reader.readAsDataURL(e.target.files[0]);
-    };
-
-    const handleSubmit = e => {
-
-        // const { userName, email, password, confirmPassword, image } = state;
-
-        // const formData = new FormData();
-
-        // formData.append('userName', userName);
-        // formData.append('email', email);
-        // formData.append('password', password);
-        // formData.append('confirmPassword', confirmPassword);
-        // formData.append('image', image);
-
-        dispatch(userRegister(state));
-
-        console.log(state);
-        e.preventDefault();        
+        
     }
+
+    // console.log('result', loadImage);
+
+    const register = e =>{
+
+        const {userName,email,password,confirmPassword} = state;
+        e.preventDefault();
+
+        var formData = new FormData();
+
+        formData.append('userName',userName);
+        formData.append('email',email);
+        formData.append('password',password);
+        formData.append('confirmPassword',confirmPassword);
+        formData.append('image',loadImage);
+
+        // let newData = {};
+
+    //    const newData = formData.forEach(el => el);
+
+        var newData = {};
+        formData.forEach(function(value, key){
+            newData[key] = value;
+        });
+
+        console.log(newData.image);
+
+
+        dispatch(userRegister(newData));
+
+    }
+
+    // useEffect(()=>{
+    //     if(authenticate){
+    //         history.push('/')
+    //     }
+    //     if(successMessage){
+    //         alert.success(successMessage);
+    //         dispatch({type : SUCCESS_MESSAGE_CLEAR})
+    //     }
+    //     if(error){
+    //         error.map(err=>alert.error(err));
+    //         dispatch({type : ERROR_CLEAR})
+    //     }
+    // },[successMessage,error])
 
     return (
         <div className="register">
@@ -64,52 +147,46 @@ const Register = () => {
                 <div className="card-header">
                     <h3>Register</h3>
                 </div>
-
                 <div className="card-body">
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit = {register} >
                         <div className="form-group">
-                            <label htmlFor="userName">User Name</label>
-                            <input type="text" name='userName' value={state.userName} onChange={inputHandle} className='form-control' id='userName' placeholder='User Name'/>
+                            <label htmlFor="username">User Name</label>
+                            <input type="text" onChange={inputHendle} name="userName" value={state.userName} className="form-control" placeholder="User Name" id="username"/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
-                            <input type="email" name='email' value={state.email} onChange={inputHandle} className='form-control' id='email' placeholder='Email' />
+                            <input type="email" value = {state.email} name='email' onChange={inputHendle} className="form-control" placeholder="Email" id="email"/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input type="password" name='password' value={state.password} onChange={inputHandle} className='form-control' id='password' placeholder='Password' />
+                            <input type="password" name = 'password' onChange={inputHendle} value = {state.password} className="form-control" placeholder="Password" id="password"/>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirm Password</label>
-                            <input type="password" name='confirmPassword' value={state.confirmPassword} onChange={inputHandle} className='form-control' id='confirmPassword' placeholder='Confirm Password' />
+                            <label htmlFor="confirmPassword">Confirm password</label>
+                            <input type="password" name ='confirmPassword' onChange={inputHendle} value = {state.confirmPassword} className="form-control" placeholder="Confirm Password" id="confirmPassword"/>
                         </div>
-
                         <div className="form-group">
                             <div className="file-image">
                                 <div className="image">
-                                    {image ? <img src={image} alt="Avatar"/> : ''}
+                                    {loadImage ? <img src={loadImage} /> : ''}
                                 </div>
                                 <div className="file">
-                                    <label htmlFor="image">Upload Image</label>
-                                    <input type="file" name='image' onChange={fileHandle} className="form-control" id="image"/>
+                                    <label htmlFor="image">Select Image</label>
+                                    <input accept="image/*" type="file" onChange={fileHendle} name="image" className="form-control" id="image"/>
                                 </div>
                             </div>
                         </div>
-
                         <div className="form-group">
-                            <input type="submit" value="Register" className="btn" />
+                            <input type="submit" value="register" className="btn"/>
                         </div>
-
                         <div className="form-group">
-                            <span>
-                                <Link to="/login">Login Your Account</Link>
-                            </span>
+                            <span><Link to="/login">Login Your Account</Link></span>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Register;
+export default Register

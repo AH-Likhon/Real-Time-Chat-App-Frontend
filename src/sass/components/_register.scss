@@ -15,10 +15,18 @@
     }
     .card-body {
       .form-group {
+        .form-control {
+          color: #fff;
+        }
         &:last-child {
           margin-bottom: 0px;
         }
-
+        span {
+          text-align: center;
+          a {
+            color: #fff;
+          }
+        }
         .file-image {
           display: flex;
           .image {
@@ -42,22 +50,15 @@
               display: none;
             }
             label {
-              width: 120px;
               background-color: #0a0e1585;
               padding: 8px;
               margin-bottom: 0px;
-              margin-left: 10px;
+              width: 120px;
               text-align: center;
               border-radius: 50px;
+              margin-left: 10px;
               cursor: pointer;
             }
-          }
-        }
-
-        span {
-          text-align: center;
-          a {
-            color: #fff;
           }
         }
       }

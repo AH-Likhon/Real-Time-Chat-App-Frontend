@@ -120,7 +120,7 @@ const Register = ({history}) => {
             newData[key] = value;
         });
 
-        console.log(newData.image);
+        // console.log(newData.image);
 
 
         dispatch(userRegister(newData));

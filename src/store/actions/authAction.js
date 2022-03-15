@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import { REGISTER_FAIL } from '../types/authType';
 // import {
 //     REGISTER_FAIL,
 //     REGISTER_SUCCESS,
@@ -15,18 +16,21 @@ export const userRegister = (data) => {
         // console.log(formData);
 
 
-        fetch('messenger/user-register', {
+        fetch('users', {
             method: 'POST',
             headers: { "content-type": "application/json" },
             body: JSON.stringify(data),
         })
         .then(res => res.json())
         .then(data => {
-            console.log('Success:', data);
+            if(data.insertedId){
+                console.log("Success:")
+            }
+            else{
+                console.log('Error:', data.error);
+            }
+            console.log(data);
         })
-        .catch(error => {
-            console.log('Error:', error);
-        });
 
         // const config = {
         //     headers: {
@@ -34,7 +38,8 @@ export const userRegister = (data) => {
         //     }
         // }
         // try {
-        //     const response = await axios.post('messenger/user-register', data, config);
+        //     const response = await axios.post('users', data, config);
+        //     console.log(response.data);
 
         //     // localStorage.setItem('authToken', response.data.token);
 
@@ -53,7 +58,7 @@ export const userRegister = (data) => {
         //     //         error: error.response.data.error.errorMessage
         //     //     }
         //     // })
-        //     console.log(error.response.data);
+        //     console.log(error);
         // }
     }
 }

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { REGISTER_FAIL } from '../types/authType';
+import { useEffect } from 'react';
+import { REGISTER_FAIL, REGISTER_SUCCESS } from '../types/authType';
 // import {
 //     REGISTER_FAIL,
 //     REGISTER_SUCCESS,
@@ -8,6 +9,7 @@ import { REGISTER_FAIL } from '../types/authType';
 // } from "../types/authType";
 
 export const userRegister = (data) => {
+
     return async (dispatch) => {
         // console.log(data);
         // const formData = { };
@@ -15,6 +17,11 @@ export const userRegister = (data) => {
 
         // console.log(formData);
 
+        // let { email } = data;
+
+        const token = data;
+
+        // let authToken = new Array();
 
         fetch('users', {
             method: 'POST',
@@ -24,12 +31,44 @@ export const userRegister = (data) => {
         .then(res => res.json())
         .then(data => {
             if(data.insertedId){
-                console.log("Success:")
+                console.log("Success:", data);
+
+                // let authToken = JSON.parse(localStorage.getItem("authToken")) ? JSON.parse(localStorage.getItem("authToken")) : [];
+
+                // authToken.push(token);
+
+                localStorage.setItem('authToken', JSON.stringify(token));
+
+                // let setToken;
+
+                // fetch(`users/${token.email}`)
+                // .then(res => res.json())
+                // .then(data => {
+                //     if(new Date() > data.expires){
+                //         setToken = { };
+                //     }else{
+                //         setToken = data;
+                //     }
+                // })
+
+                dispatch({
+                    type: REGISTER_SUCCESS,
+                    payload: {
+                        successMessage: 'Successfully registered',
+                        token: token
+                    }
+                })
             }
             else{
                 console.log('Error:', data.error);
+                dispatch({
+                    type: REGISTER_FAIL,
+                    payload: {
+                        error: data.error
+                    }
+                })
             }
-            console.log(data);
+            // console.log(JSON.parse(data));
         })
 
         // const config = {

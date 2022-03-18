@@ -1,16 +1,20 @@
-import React,{useState,useEffect} from 'react'
+import React,{ useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { userRegister } from "../store/actions/authAction";
-// import { useAlert } from "react-alert";
-// import { SUCCESS_MESSAGE_CLEAR,ERROR_CLEAR } from "../store/types/authType";
-// const Register = ({history}) => {
+import { useAlert } from "react-alert";
+import { useNavigate } from "react-router-dom";
+import { SUCCESS_MESSAGE_CLEAR, ERROR_CLEAR } from '../store/types/authType';
 
-const Register = ({history}) => {
+const Register = () => {
 
-    // const alert = useAlert();
-    // const {loading,successMessage,error,authenticate,myInfo} = useSelector(state=>state.auth);
+    const history = useNavigate();
 
+    // console.log(history);
+    
+    const alert = useAlert();
+    const { loading, successMessage, error, authenticate, myInfo } = useSelector(state => state.auth);
+    
     // console.log(myInfo);
 
     const dispatch = useDispatch();
@@ -23,6 +27,9 @@ const Register = ({history}) => {
         image : ''
     });
 
+    const [click, setClick] = useState(true);
+    console.log(click);
+
     const [loadImage,setLoadImage] = useState('');
 
     const inputHendle = (e) =>{
@@ -32,7 +39,7 @@ const Register = ({history}) => {
         })
     }
 
-    const fileHendle = e =>{
+    const fileHandle = e =>{
         if(e.target.files.length !== 0){
 
             // function getBase64(file) {
@@ -102,6 +109,7 @@ const Register = ({history}) => {
 
         const {userName,email,password,confirmPassword} = state;
         e.preventDefault();
+        setClick(false);
 
         var formData = new FormData();
 
@@ -126,6 +134,34 @@ const Register = ({history}) => {
         dispatch(userRegister(newData));
 
     }
+
+    useEffect(() => {
+
+        // if(!click){
+            
+        // }else{
+        //     alert.removeAll();
+        // }
+
+        if(authenticate){
+            history('/');
+        }
+
+        if(!click && successMessage){
+            alert.success(successMessage);
+            dispatch({ type : SUCCESS_MESSAGE_CLEAR })
+            // alert.remove(successMessage);
+            // alert.removeAll()
+        }
+
+        if(!click && error){
+            alert.error(error);
+            dispatch({ type : ERROR_CLEAR })
+            // alert.remove(error);
+            // alert.removeAll()
+        }
+
+    }, [successMessage, error])
 
     // useEffect(()=>{
     //     if(authenticate){
@@ -172,7 +208,7 @@ const Register = ({history}) => {
                                 </div>
                                 <div className="file">
                                     <label htmlFor="image">Select Image</label>
-                                    <input accept="image/*" type="file" onChange={fileHendle} name="image" className="form-control" id="image"/>
+                                    <input accept="image/*" type="file" onChange={fileHandle} name="image" className="form-control" id="image"/>
                                 </div>
                             </div>
                         </div>

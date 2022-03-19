@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useEffect } from 'react';
-import { REGISTER_FAIL, REGISTER_SUCCESS } from '../types/authType';
+// import { dispatch } from 'react-hot-toast/dist/core/store';
+import { REGISTER_FAIL, REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS } from '../types/authType';
 // import {
 //     REGISTER_FAIL,
 //     REGISTER_SUCCESS,
@@ -10,7 +10,7 @@ import { REGISTER_FAIL, REGISTER_SUCCESS } from '../types/authType';
 
 export const userRegister = (data) => {
 
-    return async (dispatch) => {
+    return async dispatch => {
         // console.log(data);
         // const formData = { };
         // data.forEach(el => console.log(el));
@@ -19,86 +19,138 @@ export const userRegister = (data) => {
 
         // let { email } = data;
 
-        const token = data;
+        // const token = data;
 
         // let authToken = new Array();
 
-        fetch('users', {
-            method: 'POST',
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(data),
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.insertedId){
-                console.log("Success:", data);
+        // fetch('http://localhost:5000/users', {
+        //     method: 'POST',
+        //     headers: { "content-type": "application/json" },
+        //     body: JSON.stringify(data),
+        // })
+        // .then(res => res.json())
+        // .then(data => {
+        //     if(data.insertedId){
+        //         console.log("Success:", data);
 
-                // let authToken = JSON.parse(localStorage.getItem("authToken")) ? JSON.parse(localStorage.getItem("authToken")) : [];
+        //         // let authToken = JSON.parse(localStorage.getItem("authToken")) ? JSON.parse(localStorage.getItem("authToken")) : [];
 
-                // authToken.push(token);
+        //         // authToken.push(token);
 
-                localStorage.setItem('authToken', JSON.stringify(token));
+        //         localStorage.setItem('authToken', JSON.stringify(token));
 
-                // let setToken;
+        //         // let setToken;
 
-                // fetch(`users/${token.email}`)
-                // .then(res => res.json())
-                // .then(data => {
-                //     if(new Date() > data.expires){
-                //         setToken = { };
-                //     }else{
-                //         setToken = data;
-                //     }
-                // })
+        //         // fetch(`users/${token.email}`)
+        //         // .then(res => res.json())
+        //         // .then(data => {
+        //         //     if(new Date() > data.expires){
+        //         //         setToken = { };
+        //         //     }else{
+        //         //         setToken = data;
+        //         //     }
+        //         // })
+
+        //         dispatch({
+        //             type: REGISTER_SUCCESS,
+        //             payload: {
+        //                 successMessage: 'Successfully registered',
+        //                 token: token
+        //             }
+        //         })
+        //     }
+        //     else{
+        //         console.log('Error:', data.error);
+        //         dispatch({
+        //             type: REGISTER_FAIL,
+        //             payload: {
+        //                 error: data.error
+        //             }
+        //         })
+        //     }
+        //     // console.log(JSON.parse(data));
+        // })
+
+        const config = {
+            headers: {
+                'content-type': 'application/json'
+            }
+        }
+        try {
+            const response = await axios.post('http://localhost:5000/users', data, config);
+            console.log(response.data);
+
+            if(response.data.error){
+                dispatch({
+                    type: REGISTER_FAIL,
+                    payload: {
+                        error: response.data.error
+                    }
+                })
+            }
+
+            if(response.data.successMessage){
+                localStorage.setItem('authToken', response.data.token);
 
                 dispatch({
                     type: REGISTER_SUCCESS,
                     payload: {
-                        successMessage: 'Successfully registered',
-                        token: token
+                        successMessage: response.data.successMessage,
+                        token: response.data.token
                     }
                 })
             }
-            else{
-                console.log('Error:', data.error);
+
+
+        } catch (error) {
+            // dispatch({
+            //     type: REGISTER_FAIL,
+            //     payload: {
+            //         error: error.response.data.error.errorMessage
+            //     }
+            // })
+            console.log(error);
+        }
+    }
+}
+
+export const userLogin = data => {
+    return async dispatch => {
+
+        const config = {
+            headers: {
+                'content-type': 'application/json'
+            }
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5000/user-login', data, config);
+            console.log(response.data);
+
+            if(response.data.error){
                 dispatch({
-                    type: REGISTER_FAIL,
+                    type: USER_LOGIN_FAIL,
                     payload: {
-                        error: data.error
+                        error: response.data.error
                     }
                 })
             }
-            // console.log(JSON.parse(data));
-        })
 
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/josn'
-        //     }
-        // }
-        // try {
-        //     const response = await axios.post('users', data, config);
-        //     console.log(response.data);
+            if(response.data.successMessage){
+                localStorage.setItem('authToken', response.data.token);
+                
+                dispatch({
+                    type: USER_LOGIN_SUCCESS,
+                    payload: {
+                        successMessage: response.data.successMessage,
+                        token: response.data.token
+                    }
+                })
+            }
 
-        //     // localStorage.setItem('authToken', response.data.token);
-
-        //     // dispatch({
-        //     //     type: REGISTER_SUCCESS,
-        //     //     payload: {
-        //     //         successMessage: response.data.successMessage,
-        //     //         token: response.data.token
-        //     //     }
-        //     // })
-
-        // } catch (error) {
-        //     // dispatch({
-        //     //     type: REGISTER_FAIL,
-        //     //     payload: {
-        //     //         error: error.response.data.error.errorMessage
-        //     //     }
-        //     // })
-        //     console.log(error);
-        // }
+        } catch (error) {
+            console.log(error.response.data)
+        }
     }
 }
 

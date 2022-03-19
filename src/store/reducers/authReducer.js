@@ -1,4 +1,5 @@
-import { REGISTER_FAIL, REGISTER_SUCCESS, SUCCESS_MESSAGE_CLEAR, ERROR_CLEAR } from "../types/authType";
+import { REGISTER_FAIL, REGISTER_SUCCESS, SUCCESS_MESSAGE_CLEAR, ERROR_CLEAR, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS } from "../types/authType";
+import deCodeToken from 'jwt-decode'
 
 const authState = {
     loading: true,
@@ -6,6 +7,16 @@ const authState = {
     error : ' ',
     successMessage : ' ',
     myInfo: ''
+}
+
+const tokenDecode = (token) =>{
+    const tokenDecoded = deCodeToken(token);
+    console.log(tokenDecoded);
+    const expTime = new Date(tokenDecoded.exp*1000);
+    if(new Date() > expTime){
+        return null;
+    }
+    return tokenDecoded;
 }
 
 // const [ token, setToken ] = React.useState()
@@ -17,7 +28,7 @@ export const authReducer = ( state = authState, action ) => {
     //         .then(res => res.json())
     //         .then(data => data)
 
-    const getToken = JSON.parse(localStorage.getItem('authToken'));
+    const getToken = localStorage.getItem('authToken');
     // console.log(getToken);
     if(getToken){
         authState.loading= false;
@@ -26,7 +37,21 @@ export const authReducer = ( state = authState, action ) => {
     }
 
 
-    if( type === REGISTER_FAIL ){
+
+
+    if( type === REGISTER_SUCCESS || type === USER_LOGIN_SUCCESS ){
+        const myInfo = tokenDecode(payload.token);
+        return{
+            ...state,
+            myInfo : myInfo,
+            successMessage : payload.successMessage,
+            error : '',
+            authenticate : true,
+            loading : false
+        }
+    }
+
+    if( type === REGISTER_FAIL || type === USER_LOGIN_FAIL ){
         return {
             ...state,
             error: payload.error,
@@ -36,17 +61,19 @@ export const authReducer = ( state = authState, action ) => {
         }
     }
 
-    if( type === REGISTER_SUCCESS ){
+    // if( type === REGISTER_SUCCESS ){
 
-       return {
-        ...state,
-        myInfo: payload.token,
-        successMessage: payload.successMessage,
-        error: '',
-        authenticate: true,
-        loading: false
-       }
-    }
+    //    return {
+    //     ...state,
+    //     myInfo: payload.token,
+    //     successMessage: payload.successMessage,
+    //     error: '',
+    //     authenticate: true,
+    //     loading: false
+    //    }
+    // }
+
+    
 
     if( type === SUCCESS_MESSAGE_CLEAR){
         return {
@@ -61,6 +88,16 @@ export const authReducer = ( state = authState, action ) => {
          error: ''
         }
     }
+
+    // if( type === USER_LOGIN_FAIL ){
+    //     return {
+    //         ...state,
+    //         error : payload.error,
+    //         authenticate : false,
+    //         myInfo : '',
+    //         loading : true
+    //     }
+    // }
 
     return state;
 }

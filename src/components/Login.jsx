@@ -1,29 +1,61 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../store/actions/authAction';
+import { useAlert } from "react-alert";
+import { useNavigate } from "react-router-dom";
+import { SUCCESS_MESSAGE_CLEAR, ERROR_CLEAR } from '../store/types/authType';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleSubmit = e => {
+    const history = useNavigate();
 
-        const result = { email, password };
-        console.log(result);
-        fetch('logIn', {
-            method: 'POST',
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(result),
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch(error => {
-            console.log('Error:', error);
-        });
+    // console.log(history);
+    
+    const alert = useAlert();
+    const { loading, successMessage, error, authenticate, myInfo } = useSelector(state => state.auth);
 
-        e.preventDefault();
+    const [click, setClick] = useState(true);
+    
+    const dispatch = useDispatch();
+
+    const [ state, setState ] = useState({ email: '', password: ''});
+
+    const handleChange = e => {
+        setState({ ...state, [e.target.name]: e.target.value})
     }
+
+    const login = e => {
+        e.preventDefault();
+
+        console.log(state);
+
+        dispatch(userLogin(state));
+
+        setClick(false);
+    }
+
+    useEffect(() => {
+
+        if(authenticate){
+            history('/hello');
+        }
+
+        if(!click && successMessage){
+            alert.success(successMessage);
+            dispatch({ type : SUCCESS_MESSAGE_CLEAR })
+            // alert.remove(successMessage);
+            // alert.removeAll()
+        }
+
+        if(!click && error){
+            alert.error(error);
+            dispatch({ type : ERROR_CLEAR })
+            // alert.remove(error);
+            // alert.removeAll()
+        }
+
+    }, [successMessage, error])
 
     return (
         <div className="login">
@@ -33,14 +65,14 @@ const Login = () => {
                 </div>
 
                 <div className="card-body">
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={login}>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
-                            <input onChange={e => setEmail(e.target.value)} type="email" name='email' placeholder='Email' id='email' className='form-control'/>
+                            <input onChange={handleChange} value={state.email} type="email" name='email' placeholder='Email' id='email' className='form-control'/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input onChange={e => setPassword(e.target.value)} type="password" name='password' placeholder='Password' id='password' className='form-control'/>
+                            <input onChange={handleChange} value={state.password} type="password" name='password' placeholder='Password' id='password' className='form-control'/>
                         </div>
                         <div className="form-group">
                             <input type="submit" value="Login" className="btn" />

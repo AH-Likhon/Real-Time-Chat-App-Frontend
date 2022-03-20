@@ -2,20 +2,23 @@ import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
-import img from '../images/image.jpg'
+import myImage from '../images/image.jpg';
+import ActiveFriend from './ActiveFriend';
+import Friends from './Friends';
+import RightSide from './RightSide';
 
 const Messenger = () => {
     return (
         <div className="messenger">
             <div className="row">
-                <div className="col-3">
 
                 {/* Start Left Side  */}
+                <div className="col-3">
                     <div className="left-side">
                         <div className="top">
                             <div className="image-name">
                                 <div className="image">
-                                    <img src={img} alt="My_Image" />
+                                    <img src={myImage} alt="My_Image" />
                                 </div>
                                 <div className="name">
                                     <h3>Likhon</h3>
@@ -38,10 +41,52 @@ const Messenger = () => {
                                 <input type="text" placeholder='Search' className="form-control" />
                             </div>
                         </div>
+
+                        {/* Start Active Friends */}
+                        <div className="active-friends">
+                            <ActiveFriend />
+                        </div>
+                        {/* End Active Friends */}
+
+                        {/* Start Friends  */}
+                        <div className="friends">
+                            <div className="hover-friend active">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend active">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                            <div className="hover-friend">
+                                <Friends />
+                            </div>
+                        </div>
+                        {/* End Friends  */}
+
                     </div>
+                </div>
                 {/* End Left Side  */}
 
-                </div>
+                {/* Start Right Side  */}
+                <RightSide />
+                {/* End Right Side  */}
             </div>
         </div>
     );

@@ -38,7 +38,7 @@ const Login = () => {
     useEffect(() => {
 
         if(authenticate){
-            history('/hello');
+            history('/messenger');
         }
 
         if(!click && successMessage){

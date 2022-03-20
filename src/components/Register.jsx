@@ -144,7 +144,7 @@ const Register = () => {
         // }
 
         if(authenticate){
-            history('/');
+            history('/messenger');
         }
 
         if(!click && successMessage){

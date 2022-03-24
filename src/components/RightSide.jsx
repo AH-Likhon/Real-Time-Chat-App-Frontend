@@ -7,7 +7,9 @@ import Message from './Message';
 import MessageSend from './MessageSend';
 import FriendInfo from './FriendInfo';
 
-const RightSide = () => {
+const RightSide = (props) => {
+    const { currentFrnd, newMessage, handleInput, sendMessage, message, scrollRef } = props;
+
     return (
         <div className="col-9">
             <div className="right-side">
@@ -18,11 +20,11 @@ const RightSide = () => {
                             <div className="header">
                                 <div className="image-name">
                                     <div className="image">
-                                        <img src={myImage} alt="" />
+                                        <img src={currentFrnd.image} alt="" />
                                         <div className="active-icon"></div>
                                     </div>
                                     <div className="name">
-                                       <h3>Md. Akramul Hoque</h3>
+                                        <h3>{currentFrnd.userName}</h3>
                                     </div>
                                 </div>
 
@@ -42,14 +44,14 @@ const RightSide = () => {
                             </div>
 
                             {/* start message  */}
-                            <Message />
-                            <MessageSend />
+                            <Message scrollRef={scrollRef} currentFrnd={currentFrnd} message={message} />
+                            <MessageSend newMessage={newMessage} handleInput={handleInput} sendMessage={sendMessage} />
                             {/* end message  */}
                         </div>
                     </div>
 
                     <div className="col-4">
-                        <FriendInfo />
+                        <FriendInfo key={currentFrnd._id} currentFrnd={currentFrnd} />
                     </div>
                 </div>
             </div>

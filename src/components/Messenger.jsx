@@ -6,7 +6,7 @@ import ActiveFriend from './ActiveFriend';
 import Friends from './Friends';
 import RightSide from './RightSide';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFriends, messageSend, getMessage } from '../store/actions/messengerAction';
+import { getFriends, messageSend, getMessage, imgMessageSend } from '../store/actions/messengerAction';
 
 const Messenger = () => {
 
@@ -21,11 +21,51 @@ const Messenger = () => {
     // console.log(currentFrnd);
 
     const [newMessage, setNewMessage] = useState('');
+    const [sendImage, setSendImage] = useState('');
 
     const dispatch = useDispatch();
 
     const handleInput = e => {
         setNewMessage(e.target.value);
+        // setSendImage('');
+    }
+
+    const imageSend = e => {
+        if (e.target.files.length !== 0) {
+            const imageName = e.target.files[0].name;
+            const newImageName = Date.now() + imageName;
+            console.log(newImageName);
+            // setSendImage(imageName);
+            // setNewMessage('');
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                setSendImage(reader.result);
+            }
+
+            reader.readAsDataURL(e.target.files[0]);
+
+            // const formData = new FormData();
+            // formData.append('senderId', myInfo.id);
+            // formData.append('senderName', myInfo.userName);
+            // formData.append('receiverId', currentFrnd._id);
+            // formData.append('image', e.target.files[0]);
+            // formData.append('imageName', newImageName);
+
+            // dispatch(imgMessageSend(formData));
+            console.log(sendImage);
+
+            const data = {
+                senderId: myInfo.id,
+                senderName: myInfo.userName,
+                receiverId: currentFrnd._id,
+                message: '',
+                image: sendImage
+            };
+
+            dispatch(imgMessageSend(data));
+        }
     }
 
     const sendMessage = e => {
@@ -35,11 +75,21 @@ const Messenger = () => {
             senderId: myInfo.id,
             senderName: myInfo.userName,
             receiverId: currentFrnd._id,
-            message: newMessage ? newMessage : '❤️'
+            message: newMessage ? newMessage : '❤️',
+            image: sendImage
         };
 
         dispatch(messageSend(data));
+
+        console.log(data);
     }
+
+    const emojiSend = emoji => {
+        setNewMessage(`${newMessage}` + emoji);
+        // setSendImage('');
+    }
+
+
 
     useEffect(() => {
         dispatch(getFriends())
@@ -124,6 +174,8 @@ const Messenger = () => {
                         sendMessage={sendMessage}
                         message={message}
                         scrollRef={scrollRef}
+                        emojiSend={emojiSend}
+                        imageSend={imageSend}
                     /> : 'Please, select your friend'
                 }
                 {/* End Right Side  */}

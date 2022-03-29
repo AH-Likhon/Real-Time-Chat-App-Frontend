@@ -62,3 +62,26 @@ export const getMessage = (frndId, myId) => {
         }
     }
 }
+
+
+export const imgMessageSend = (data) => async (dispatch) => {
+
+    const config = {
+        headers: {
+            'content-type': 'application/json'
+        }
+    }
+
+    try {
+        const response = await axios.post('http://localhost:5000/image-message', data, config);
+        dispatch({
+            type: MESSAGE_SEND_SUCCESS,
+            payload: {
+                message: response.data.message
+            }
+        })
+    } catch (error) {
+        console.log(error.response.data)
+    }
+
+}

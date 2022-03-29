@@ -5,7 +5,7 @@ import { BiMessageAltEdit } from 'react-icons/bi';
 import { AiFillGift } from 'react-icons/ai';
 
 const MessageSend = (props) => {
-    const { newMessage, handleInput, sendMessage } = props;
+    const { newMessage, handleInput, sendMessage, emojiSend, imageSend } = props;
 
     const emojis = [
         '😀', '😃', '😄', '😁',
@@ -28,7 +28,7 @@ const MessageSend = (props) => {
                 <div className="add-image">
                     Add Image
                 </div>
-                <input type="file" id="pic" className="form-control" />
+                <input onChange={imageSend} type="file" id="pic" className="form-control" />
                 <label htmlFor="pic"><RiGalleryLine /></label>
             </div>
             <div className="file">
@@ -36,7 +36,7 @@ const MessageSend = (props) => {
             </div>
             <div className="file hover-gift">
                 <div className="add-gift">
-                    Add Gift 
+                    Add Gift
                 </div>
                 <AiFillGift />
             </div>
@@ -51,7 +51,7 @@ const MessageSend = (props) => {
             <div className="emoji-section">
                 <div className="emoji">
                     {
-                        emojis.map(emoji => <span>{emoji}</span>)
+                        emojis.map(emoji => <span onClick={() => emojiSend(emoji)}>{emoji}</span>)
                     }
                 </div>
             </div>

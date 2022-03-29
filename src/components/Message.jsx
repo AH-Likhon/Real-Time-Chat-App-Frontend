@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+// import image from "../../src/images/image.jpg"
 
 const Message = ({ message, currentFrnd, scrollRef }) => {
     const { myInfo } = useSelector(state => state.auth);
@@ -12,7 +13,15 @@ const Message = ({ message, currentFrnd, scrollRef }) => {
                         <div ref={scrollRef} className="my-message">
                             <div className="image-message">
                                 <div className="my-text">
-                                    <p className="message-text"> {m.message.text} </p>
+                                    <p className="message-text">
+                                        {/* {
+                                            m.message.image === '' ? m.message.text : <img src={m.message.image}></img>
+                                        } */}
+                                        {m.message.text === '' ? <img src={m.message.image} alt='image' /> : m.message.text}
+                                    </p>
+                                    {/* {
+                                        m.message.image && m.message.image === '' ? <p className='message-text'>{m.message.text}</p> : <img src={m.message.image} alt="image" />
+                                    } */}
                                 </div>
                             </div>
 
@@ -38,7 +47,7 @@ const Message = ({ message, currentFrnd, scrollRef }) => {
                         </div>
                 ) : ''
             }
-        </div>
+        </div >
     );
 };
 

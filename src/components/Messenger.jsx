@@ -5,12 +5,12 @@ import { BiSearch } from 'react-icons/bi';
 import ActiveFriend from './ActiveFriend';
 import Friends from './Friends';
 import RightSide from './RightSide';
+import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFriends, messageSend, getMessage, imgMessageSend } from '../store/actions/messengerAction';
 
 const Messenger = () => {
 
-    const scrollRef = useRef();
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
 
@@ -22,6 +22,31 @@ const Messenger = () => {
 
     const [newMessage, setNewMessage] = useState('');
     const [sendImage, setSendImage] = useState('');
+    const [activeUser, setActiveUser] = useState([]);
+
+    const scrollRef = useRef();
+    const socket = useRef();
+
+    console.log(socket);
+
+    useEffect(() => {
+        socket.current = io('ws://localhost:8000');
+    }, []);
+
+    useEffect(() => {
+        socket.current.emit('addUser', myInfo.id, myInfo)
+        // console.log(myInfo)
+    }, []);
+
+    useEffect(() => {
+        socket.current.on('getUser', users => {
+            const filterUsers = users.filter(user => user.userId !== myInfo.id);
+            console.log(filterUsers);
+            setActiveUser(filterUsers);
+        })
+    }, [])
+
+
 
     const dispatch = useDispatch();
 
@@ -145,7 +170,9 @@ const Messenger = () => {
 
                         {/* Start Active Friends */}
                         <div className="active-friends">
-                            <ActiveFriend />
+                            {
+                                activeUser && activeUser.length > 0 ? activeUser.map(user => <ActiveFriend user={user} setCurrentFrnd={setCurrentFrnd} />) : ''
+                            }
                         </div>
                         {/* End Active Friends */}
 
@@ -176,6 +203,7 @@ const Messenger = () => {
                         scrollRef={scrollRef}
                         emojiSend={emojiSend}
                         imageSend={imageSend}
+                        activeUser={activeUser}
                     /> : 'Please, select your friend'
                 }
                 {/* End Right Side  */}

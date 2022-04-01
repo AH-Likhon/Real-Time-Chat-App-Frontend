@@ -1,20 +1,25 @@
 .active-friends {
   .active-friend {
     overflow: hidden;
+
     .image-active-icon {
       display: flex;
       overflow-x: scroll;
+
       &::-webkit-scrollbar {
         overflow: hidden;
       }
+
       .image {
         margin: 5px;
         position: relative;
+
         img {
           width: 38px;
           height: 38px;
           border-radius: 50%;
         }
+
         .active-icon {
           position: absolute;
           width: 10px;

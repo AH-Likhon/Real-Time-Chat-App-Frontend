@@ -1,46 +1,21 @@
 import React from 'react';
-import myImage from '../images/image.jpg';
 
-const ActiveFriend = () => {
+const ActiveFriend = ({ user, setCurrentFrnd }) => {
+    // console.log(user);
     return (
-        <div className="active-friend">
+        <div onClick={() => setCurrentFrnd({
+            _id: user.userInfo.id,
+            email: user.userInfo.email,
+            image: user.userInfo.image,
+            userName: user.userInfo.userName,
+        })} className="active-friend">
             <div className="image-active-icon">
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
-                <div className="image">
-                    <img src={myImage} alt="" />
-                    <div className="active-icon"></div>
-                </div>
+                {
+                    user?.userInfo?.image ? <div className="image">
+                        <img src={user.userInfo.image} alt="" />
+                        <div className="active-icon"></div>
+                    </div> : ' '
+                }
             </div>
         </div>
     );

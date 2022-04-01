@@ -3,7 +3,7 @@ import myImage from '../images/image.jpg';
 import { BsChevronDown } from 'react-icons/bs';
 
 const FriendInfo = (props) => {
-    const { currentFrnd } = props;
+    const { currentFrnd, activeUser } = props;
     return (
         <div className="friend-info">
             <input type="checkbox" id="gallery" />
@@ -11,9 +11,9 @@ const FriendInfo = (props) => {
                 <div className="image">
                     <img src={currentFrnd.image} alt="" />
                 </div>
-                <div className="active-user">
-                    Active
-                </div>
+                {
+                    activeUser && activeUser.length > 0 && activeUser.some(user => user.userId === currentFrnd._id) ? <div className="active-user"> Active </div> : ''
+                }
                 <div className="name">
                     <h4>{currentFrnd.userName}</h4>
                 </div>

@@ -20,8 +20,11 @@ const Messenger = () => {
     const [currentFrnd, setCurrentFrnd] = useState('');
     // console.log(currentFrnd);
 
+
+    const dispatch = useDispatch();
+
     const [newMessage, setNewMessage] = useState('');
-    const [sendImage, setSendImage] = useState('');
+    // const [sendImage, setSendImage] = useState('');
     const [activeUser, setActiveUser] = useState([]);
 
     const scrollRef = useRef();
@@ -47,9 +50,6 @@ const Messenger = () => {
     }, [])
 
 
-
-    const dispatch = useDispatch();
-
     const handleInput = e => {
         setNewMessage(e.target.value);
         // setSendImage('');
@@ -59,39 +59,58 @@ const Messenger = () => {
         if (e.target.files.length !== 0) {
             const imageName = e.target.files[0].name;
             const newImageName = Date.now() + imageName;
-            console.log(newImageName);
+            // console.log(newImageName);
             // setSendImage(imageName);
             // setNewMessage('');
 
-            const reader = new FileReader();
+            // const reader = new FileReader();
 
-            reader.onload = () => {
-                setSendImage(reader.result);
-            }
+            // let loadImg;
 
-            reader.readAsDataURL(e.target.files[0]);
+            // reader.onload = () => {
+            //     setSendImage(reader.result);
+            //     console.log(sendImage);
+            // }
 
-            // const formData = new FormData();
-            // formData.append('senderId', myInfo.id);
-            // formData.append('senderName', myInfo.userName);
-            // formData.append('receiverId', currentFrnd._id);
-            // formData.append('image', e.target.files[0]);
+            // console.log(sendImage);
+
+            const url = URL.createObjectURL(e.target.files[0]);
+            console.log(url);
+
+            // reader.readAsDataURL(e.target.files[0]);
+
+            const formData = new FormData();
+            formData.append('senderId', myInfo.id);
+            formData.append('senderName', myInfo.userName);
+            formData.append('receiverId', currentFrnd._id);
+            formData.append('image', url);
             // formData.append('imageName', newImageName);
 
+            var newData = {};
+
+            formData.forEach(function (value, key) {
+                newData[key] = value;
+            });
+
+            // console.log(newData);
+
             // dispatch(imgMessageSend(formData));
-            console.log(sendImage);
 
             const data = {
-                senderId: myInfo.id,
-                senderName: myInfo.userName,
-                receiverId: currentFrnd._id,
+                senderId: newData.senderId,
+                senderName: newData.senderName,
+                receiverId: newData.receiverId,
                 message: '',
-                image: sendImage
+                image: newData.image
             };
 
             dispatch(imgMessageSend(data));
+
+            console.log(data);
         }
     }
+
+    // setTimeout(imageSend, 5000);
 
     const sendMessage = e => {
         e.preventDefault();
@@ -101,7 +120,7 @@ const Messenger = () => {
             senderName: myInfo.userName,
             receiverId: currentFrnd._id,
             message: newMessage ? newMessage : '❤️',
-            image: sendImage
+            image: ''
         };
 
         dispatch(messageSend(data));

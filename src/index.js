@@ -8,6 +8,9 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import alertTemplate from 'react-alert-template-basic';
+// import persistStore from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import persistStore from 'redux-persist/es/persistStore';
 
 const options = {
   timeout: 5000,
@@ -15,11 +18,15 @@ const options = {
   transitions: transitions.SCALE
 }
 
+let persistor = persistStore(store);
+
 ReactDOM.render(
   <Provider store={store}>
-    <AlertProvider template={alertTemplate} {...options}>
-      <App />
-    </AlertProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <AlertProvider template={alertTemplate} {...options}>
+        <App />
+      </AlertProvider>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

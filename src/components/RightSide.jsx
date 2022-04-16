@@ -8,7 +8,7 @@ import MessageSend from './MessageSend';
 import FriendInfo from './FriendInfo';
 
 const RightSide = (props) => {
-    const { currentFrnd, newMessage, handleInput, sendMessage, message, scrollRef, emojiSend, imageSend, activeUser } = props;
+    const { currentFrnd, newMessage, handleInput, sendMessage, message, scrollRef, emojiSend, imageSend, activeUser, typing } = props;
 
     return (
         <div className="col-9">
@@ -51,6 +51,7 @@ const RightSide = (props) => {
                                 scrollRef={scrollRef}
                                 currentFrnd={currentFrnd}
                                 message={message}
+                                typing={typing}
                             />
 
                             <MessageSend

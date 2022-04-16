@@ -26,6 +26,8 @@ const Messenger = () => {
     const [newMessage, setNewMessage] = useState('');
     // const [sendImage, setSendImage] = useState('');
     const [activeUser, setActiveUser] = useState([]);
+    const [socketMessage, setSocketMessage] = useState('');
+    const [typing, setTyping] = useState('');
 
     const scrollRef = useRef();
     const socket = useRef();
@@ -34,6 +36,14 @@ const Messenger = () => {
 
     useEffect(() => {
         socket.current = io('ws://localhost:8000');
+        socket.current.on('getMessage', data => {
+            setSocketMessage(data);
+        })
+
+        socket.current.on('getTyping', data => {
+            setTyping(data);
+            console.log(data);
+        })
     }, []);
 
     useEffect(() => {
@@ -47,12 +57,34 @@ const Messenger = () => {
             console.log(filterUsers);
             setActiveUser(filterUsers);
         })
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (socketMessage && currentFrnd) {
+            if (socketMessage.senderId === currentFrnd._id && socketMessage.receiverId === myInfo.id) {
+                dispatch({
+                    type: 'SOCKET_MESSAGE',
+                    payload: {
+                        message: socketMessage
+                    }
+                })
+            }
+        }
+
+        setSocketMessage('');
+
+    }, [socketMessage])
 
 
     const handleInput = e => {
         setNewMessage(e.target.value);
         // setSendImage('');
+
+        socket.current.emit('typing', {
+            senderId: myInfo.id,
+            receiverId: currentFrnd._id,
+            message: e.target.value
+        })
     }
 
     const imageSend = e => {
@@ -76,6 +108,15 @@ const Messenger = () => {
 
             const url = URL.createObjectURL(e.target.files[0]);
             console.log(url);
+
+            socket.current.emit('sendMessage', {
+                senderId: myInfo.id,
+                senderName: myInfo.userName,
+                receiverId: currentFrnd._id,
+                message: '',
+                image: newImageName,
+                time: new Date()
+            });
 
             // reader.readAsDataURL(e.target.files[0]);
 
@@ -123,7 +164,23 @@ const Messenger = () => {
             image: ''
         };
 
+        socket.current.emit('sendMessage', {
+            senderId: myInfo.id,
+            senderName: myInfo.userName,
+            receiverId: currentFrnd._id,
+            message: newMessage ? newMessage : '❤️',
+            image: '',
+            time: new Date()
+        })
+
+        socket.current.emit('typing', {
+            senderId: myInfo.id,
+            receiverId: currentFrnd._id,
+            message: ''
+        })
+
         dispatch(messageSend(data));
+        setNewMessage('');
 
         console.log(data);
     }
@@ -223,6 +280,7 @@ const Messenger = () => {
                         emojiSend={emojiSend}
                         imageSend={imageSend}
                         activeUser={activeUser}
+                        typing={typing}
                     /> : 'Please, select your friend'
                 }
                 {/* End Right Side  */}

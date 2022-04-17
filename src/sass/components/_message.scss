@@ -49,10 +49,13 @@
       justify-content: flex-start;
       width: 370px;
       color: white;
+      // padding: 8px;
+      // border-radius: 5px;
 
       .message-text {
         text-align: start;
         border-radius: 10px;
+        // background-color: #28324ed9;
 
         img {
           width: 220px;
@@ -85,6 +88,7 @@
     background-color: #28324ed9;
     font-size: 14px;
     font-weight: 400;
+    // border-radius: 10px;
   }
 
   .time {
@@ -92,4 +96,9 @@
     color: yellowgreen;
     font-size: 12px;
   }
+}
+
+
+.typing-message {
+  padding: 0px 10px;
 }

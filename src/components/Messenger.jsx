@@ -1,4 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import useSound from 'use-sound';
+import notification from '../audio/notification.mp3';
+import sending from '../audio/sending.mp3';
 import { FaEdit } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
@@ -10,6 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFriends, messageSend, getMessage, imgMessageSend } from '../store/actions/messengerAction';
 
 const Messenger = () => {
+
+    const [notificationSPlay] = useSound(notification);
+    const [sendingSPlay] = useSound(sending);
 
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
@@ -73,6 +80,14 @@ const Messenger = () => {
 
         setSocketMessage('');
 
+    }, [socketMessage]);
+
+
+    useEffect(() => {
+        if (socketMessage && socketMessage.senderId !== currentFrnd._id && socketMessage.receiverId === myInfo.id) {
+            notificationSPlay();
+            toast.success(`${socketMessage.senderName} sent a new message`);
+        }
     }, [socketMessage])
 
 
@@ -89,6 +104,8 @@ const Messenger = () => {
 
     const imageSend = e => {
         if (e.target.files.length !== 0) {
+            sendingSPlay();
+
             const imageName = e.target.files[0].name;
             const newImageName = Date.now() + imageName;
             // console.log(newImageName);
@@ -155,6 +172,9 @@ const Messenger = () => {
 
     const sendMessage = e => {
         e.preventDefault();
+
+        sendingSPlay();
+
         // console.log(newMessage);
         const data = {
             senderId: myInfo.id,
@@ -188,6 +208,12 @@ const Messenger = () => {
     const emojiSend = emoji => {
         setNewMessage(`${newMessage}` + emoji);
         // setSendImage('');
+
+        socket.current.emit('typing', {
+            senderId: myInfo.id,
+            receiverId: currentFrnd._id,
+            message: emoji
+        })
     }
 
 
@@ -212,6 +238,17 @@ const Messenger = () => {
 
     return (
         <div className="messenger">
+
+            <Toaster
+                position={'top-right'}
+                reverseOrder={false}
+                toastOptions={{
+                    style: {
+                        fontSize: '18px'
+                    }
+                }}
+            />
+
             <div className="row">
 
                 {/* Start Left Side  */}

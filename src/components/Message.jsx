@@ -38,7 +38,9 @@ const Message = ({ message, currentFrnd, scrollRef, typing }) => {
                                     <div className="message-time">
                                         <div className="frnd-text">
                                             {/* <p className="message-text">{m.message.text}</p> */}
-                                            {m.message.text === '' ? <img src={m.message.image} alt='image' /> : m.message.text}
+                                            <p className='message-text'>
+                                                {m.message.text === '' ? <img src={m.message.image} alt='image' /> : m.message.text}
+                                            </p>
                                         </div>
 
                                         <div className="time">

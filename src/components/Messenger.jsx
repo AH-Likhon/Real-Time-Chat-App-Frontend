@@ -18,10 +18,41 @@ const Messenger = () => {
     const [notificationSPlay] = useSound(notification);
     const [sendingSPlay] = useSound(sending);
 
+    // const { friends, message, lastSMS } = useSelector(state => state.messenger);
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
 
-    const myFriends = friends.filter(friend => friend.email !== myInfo.email);
+    // const myFriends = friends.filter(friend => friend.email !== myInfo.email);
+    const myFriends = friends.filter(friend => `_id: {
+        $ne: myInfo.id
+    }`);
+
+    // console.log(lastSMS[0]);
+
+
+    //     let fnd_msg = [];
+
+    //     for (let i = 0; i < myFriends.length; i++) {
+    //         let lmsg = getLastMSG(myInfo.id, myFriends[i]._id);
+    //         fnd_msg = [...fnd_msg, {
+    //             fndInfo: myFriends[i],
+    //             msgInfo: lmsg
+    //         }]
+    //     };
+
+    //     const getLastMSG = (myInfo.id, frndId) => {
+    //     const msg = message.filter(m =>
+    //         `$or: [
+    //                 {
+    //                     $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
+    //                 },
+    //                 {
+    //                     $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
+    //                 }
+    //             ]`)
+    // }
+
+
     // console.log(myFriends);
 
     const [currentFrnd, setCurrentFrnd] = useState('');

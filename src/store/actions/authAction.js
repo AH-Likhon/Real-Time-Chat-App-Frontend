@@ -11,7 +11,7 @@ import { REGISTER_FAIL, REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS } 
 export const userRegister = (data) => {
 
     return async dispatch => {
-        // console.log(data);
+        console.log(data);
         // const formData = { };
         // data.forEach(el => console.log(el));
 
@@ -114,7 +114,8 @@ export const userRegister = (data) => {
     }
 }
 
-export const userLogin = data => {
+export const userLogin = (data) => {
+
     return async dispatch => {
 
         const config = {
@@ -122,6 +123,8 @@ export const userLogin = data => {
                 'content-type': 'application/json'
             }
         }
+
+        // console.log(data);
 
         try {
             const response = await axios.post('http://localhost:5000/user-login', data, config);
@@ -149,7 +152,7 @@ export const userLogin = data => {
             }
 
         } catch (error) {
-            console.log(error.response.data)
+            console.log(error)
         }
     }
 }

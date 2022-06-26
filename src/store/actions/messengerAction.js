@@ -1,5 +1,5 @@
 import axios from "axios"
-import { FRIENDS_GET_SUCCESS, MESAGE_GET_SUCCESSS, MESSAGE_SEND_SUCCESS } from "../types/messengerTypes";
+import { FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS } from "../types/messengerTypes";
 
 export const getFriends = () => async (dispatch) => {
     try {
@@ -46,14 +46,37 @@ export const getMessage = (frndId, myId) => {
             const response = await axios.get("http://localhost:5000/get-message");
             // console.log(response.data.getAllMessage);
 
-            const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === frndId && m.receiverId === myId) || (m.senderId === myId && m.receiverId === frndId));
+            const getAllMessage = response.data.getAllMessage.filter(m =>
+                `$or: [
+                {
+                    $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
+                },
+                {
+                    $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
+                }
+            ]`
+            );
+
+            const getLastMSG = response.data.getAllMessage.filter(m =>
+                `$or: [
+                {
+                    $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
+                },
+                {
+                    $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
+                }
+            ].sort({ updatedAt: -1 })`
+            );
+
+            // const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId));
 
             // console.log(getAllMessage);
 
             dispatch({
-                type: MESAGE_GET_SUCCESSS,
+                type: MESSAGE_GET_SUCCESS,
                 payload: {
-                    message: getAllMessage
+                    message: getAllMessage,
+                    lastSMS: getLastMSG
                 }
             });
 

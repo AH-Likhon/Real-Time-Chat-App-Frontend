@@ -78,6 +78,9 @@ export const userRegister = (data) => {
         }
         try {
             const response = await axios.post('http://localhost:5000/users', data, config);
+
+            const res = await axios.post('http://localhost:5000/user-login', data, config);
+            
             console.log(response.data);
 
             if(response.data.error){
@@ -120,7 +123,8 @@ export const userLogin = (data) => {
 
         const config = {
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                // "Access-Control-Allow-Origin": "*",
             }
         }
 
@@ -128,6 +132,8 @@ export const userLogin = (data) => {
 
         try {
             const response = await axios.post('http://localhost:5000/user-login', data, config);
+            
+            // response.set("Access-Control-Allow-Origin", "*");
             console.log(response.data);
 
             if(response.data.error){

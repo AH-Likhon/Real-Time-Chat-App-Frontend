@@ -70,6 +70,9 @@ export const getMessage = (frndId, myId) => {
 
             // const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId));
 
+
+            // const getLastMSG = response.data.getAllMessage.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId)).sort({ updatedAt: -1 }));
+
             // console.log(getAllMessage);
 
             dispatch({

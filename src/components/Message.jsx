@@ -55,10 +55,9 @@ const Message = ({ message, currentFrnd, scrollRef, typing }) => {
 
             {
                 typing && typing.message && typing.senderId === currentFrnd._id ? <div className="typing-message">
-                    <div ref={scrollRef} className="frnd-message">
+                    <div className="frnd-message">
                         <div className="image-message-time">
                             <img src={currentFrnd.image} alt="" />
-
                             <div className="message-time">
                                 <div className="frnd-text">
                                     <p className="message-text">Typing....</p>

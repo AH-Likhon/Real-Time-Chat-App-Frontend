@@ -22,10 +22,10 @@ const Messenger = () => {
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
 
-    // const myFriends = friends.filter(friend => friend.email !== myInfo.email);
-    const myFriends = friends.filter(friend => `_id: {
-        $ne: myInfo.id
-    }`);
+    const myFriends = friends.filter(friend => friend.email !== myInfo.email);
+    // const myFriends = friends.filter(friend => `{$friend._id}: {
+    //     $ne: myInfo.id
+    // }`);
 
     // console.log(lastSMS[0]);
 
@@ -78,7 +78,7 @@ const Messenger = () => {
             setSocketMessage(data);
         })
 
-        socket.current.on('getTyping', data => {
+        socket.current.on('getTyping', (data) => {
             setTyping(data);
             console.log(data);
         })

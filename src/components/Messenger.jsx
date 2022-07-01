@@ -12,6 +12,7 @@ import RightSide from './RightSide';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFriends, messageSend, getMessage, imgMessageSend } from '../store/actions/messengerAction';
+// import { LAST_SMS, MESSAGE_GET_SUCCESS } from '../store/types/messengerTypes';
 
 const Messenger = () => {
 
@@ -26,10 +27,6 @@ const Messenger = () => {
     // const myFriends = friends.filter(friend => `{$friend._id}: {
     //     $ne: myInfo.id
     // }`);
-
-    // console.log(lastSMS[0]);
-
-
     //     let fnd_msg = [];
 
     //     for (let i = 0; i < myFriends.length; i++) {
@@ -58,17 +55,31 @@ const Messenger = () => {
     const [currentFrnd, setCurrentFrnd] = useState('');
     // console.log(currentFrnd);
 
+    console.log('Last SMS:', message.slice(-1));
+
+
+    // let lastSMS = message.slice(-1);
+
 
     const dispatch = useDispatch();
 
     const [newMessage, setNewMessage] = useState('');
     // const [sendImage, setSendImage] = useState('');
     const [activeUser, setActiveUser] = useState([]);
-    const [socketMessage, setSocketMessage] = useState('');
+    const [socketMessage, setSocketMessage] = useState("");
     const [typing, setTyping] = useState('');
 
     const scrollRef = useRef();
     const socket = useRef();
+
+
+    // dispatch({
+    //     type: LAST_SMS,
+    //     payload: {
+    //         lastSMS: lastSMS,
+    //         // lastSMS: getLastMSG
+    //     }
+    // });
 
     console.log(socket);
 
@@ -109,7 +120,7 @@ const Messenger = () => {
             }
         }
 
-        setSocketMessage('');
+        setSocketMessage("");
 
     }, [socketMessage]);
 
@@ -161,8 +172,10 @@ const Messenger = () => {
                 senderId: myInfo.id,
                 senderName: myInfo.userName,
                 receiverId: currentFrnd._id,
+                receiverName: currentFrnd.userName,
                 message: '',
-                image: newImageName,
+                // image: newImageName,
+                image: url,
                 time: new Date()
             });
 
@@ -172,6 +185,7 @@ const Messenger = () => {
             formData.append('senderId', myInfo.id);
             formData.append('senderName', myInfo.userName);
             formData.append('receiverId', currentFrnd._id);
+            formData.append('receiverName', currentFrnd.userName);
             formData.append('image', url);
             // formData.append('imageName', newImageName);
 
@@ -189,6 +203,7 @@ const Messenger = () => {
                 senderId: newData.senderId,
                 senderName: newData.senderName,
                 receiverId: newData.receiverId,
+                receiverName: newData.receiverName,
                 message: '',
                 image: newData.image
             };
@@ -211,6 +226,7 @@ const Messenger = () => {
             senderId: myInfo.id,
             senderName: myInfo.userName,
             receiverId: currentFrnd._id,
+            receiverName: currentFrnd.userName,
             message: newMessage ? newMessage : '❤️',
             image: ''
         };
@@ -219,6 +235,7 @@ const Messenger = () => {
             senderId: myInfo.id,
             senderName: myInfo.userName,
             receiverId: currentFrnd._id,
+            receiverName: currentFrnd.userName,
             message: newMessage ? newMessage : '❤️',
             image: '',
             time: new Date()
@@ -231,7 +248,9 @@ const Messenger = () => {
         })
 
         dispatch(messageSend(data));
+        // setLastSMS(data.slice(-1));
         setNewMessage('');
+
 
         console.log(data);
     }
@@ -260,6 +279,7 @@ const Messenger = () => {
     }, [friends]);
 
     useEffect(() => {
+        console.log("Frnd ID:", currentFrnd._id, "My ID:", myInfo.id);
         dispatch(getMessage(currentFrnd._id, myInfo.id))
     }, [currentFrnd?._id]);
 

@@ -46,40 +46,41 @@ export const getMessage = (frndId, myId) => {
             const response = await axios.get("http://localhost:5000/get-message");
             // console.log(response.data.getAllMessage);
 
-            const getAllMessage = response.data.getAllMessage.filter(m =>
-                `$or: [
-                {
-                    $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
-                },
-                {
-                    $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
-                }
-            ]`
-            );
+            // const getAllMessage = await response.data.getAllMessage.filter(m =>
+            //     `$or: [
+            //     {
+            //         $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
+            //     },
+            //     {
+            //         $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
+            //     }
+            // ]`
+            // );
 
-            const getLastMSG = response.data.getAllMessage.filter(m =>
-                `$or: [
-                {
-                    $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
-                },
-                {
-                    $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
-                }
-            ].sort({ updatedAt: -1 })`
-            );
+            // const getLastMSG = await response.data.getAllMessage.filter(m =>
+            //     `$or: [
+            //     {
+            //         $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
+            //     },
+            //     {
+            //         $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
+            //     }
+            // ].sort({ updatedAt: -1 })`
+            // );
 
-            // const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId));
+            const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId));
 
 
+            // const getLastMSG = response.data.getAllMessage.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId))).slice(-1);
             // const getLastMSG = response.data.getAllMessage.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId)).sort({ updatedAt: -1 }));
 
-            // console.log(getAllMessage);
+            // console.log("last SMS", getLastMSG);
 
             dispatch({
                 type: MESSAGE_GET_SUCCESS,
                 payload: {
                     message: getAllMessage,
-                    lastSMS: getLastMSG
+                    // lastSMS: getLastMSG
                 }
             });
 

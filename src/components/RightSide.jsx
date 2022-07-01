@@ -57,7 +57,8 @@ const RightSide = (props) => {
                             <MessageSend
                                 newMessage={newMessage}
                                 handleInput={handleInput}
-                                sendMessage={sendMessage} emojiSend={emojiSend}
+                                sendMessage={sendMessage}
+                                emojiSend={emojiSend}
                                 imageSend={imageSend}
                             />
                             {/* end message  */}

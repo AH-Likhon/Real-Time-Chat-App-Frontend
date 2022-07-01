@@ -20,7 +20,8 @@ export const messengerReducer = (state = messengerState, action) => {
     if (type === MESSAGE_GET_SUCCESS) {
         return {
             ...state,
-            message: payload.message
+            message: payload.message,
+            // lastSMS: payload.lastSMS
         }
     }
 

@@ -72,7 +72,7 @@ export const getMessage = (frndId, myId) => {
 
 
             // const getLastMSG = response.data.getAllMessage.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId))).slice(-1);
-            // const getLastMSG = response.data.getAllMessage.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId)).sort({ updatedAt: -1 }));
+            // const getLastMSG = response.data.getAllMessage.findOne((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId))).sort({ updatedAt: -1 });
 
             // console.log("last SMS", getLastMSG);
 

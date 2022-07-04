@@ -10,6 +10,8 @@ import FriendInfo from './FriendInfo';
 const RightSide = (props) => {
     const { currentFrnd, newMessage, handleInput, sendMessage, message, scrollRef, emojiSend, imageSend, activeUser, typing } = props;
 
+    // console.log(activeUser[0]?.userId)
+
     return (
         <div className="col-9">
             <div className="right-side">
@@ -49,12 +51,14 @@ const RightSide = (props) => {
                             {/* start message  */}
                             <Message
                                 scrollRef={scrollRef}
+                                key={currentFrnd._id}
                                 currentFrnd={currentFrnd}
                                 message={message}
                                 typing={typing}
                             />
 
                             <MessageSend
+                                // key={activeUser[0]?.userId}
                                 newMessage={newMessage}
                                 handleInput={handleInput}
                                 sendMessage={sendMessage}

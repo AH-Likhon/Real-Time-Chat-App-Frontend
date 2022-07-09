@@ -78,6 +78,15 @@
             border-radius: 50%;
           }
 
+          .delivered,
+          .unseen {
+            color: #fff;
+          }
+
+          .delivered {
+            color: #7FFFD4;
+          }
+
           .seen-icon {
             width: 15px;
             height: 15px;

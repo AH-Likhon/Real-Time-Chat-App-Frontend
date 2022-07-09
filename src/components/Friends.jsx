@@ -1,14 +1,15 @@
 import moment from 'moment';
 import React from 'react';
+import { BsCheck2All } from 'react-icons/bs';
+import { HiOutlineCheckCircle } from 'react-icons/hi';
+import { RiCheckboxCircleFill } from 'react-icons/ri';
 
 const Friends = ({ friend, sms, myId }) => {
 
-    // const { friends, message } = useSelector(state => state.messenger);
-    // const { myInfo } = useSelector(state => state.auth);
     let lsms = sms.filter((m => (m.senderId === myId && m.receiverId === friend._id) || (m.senderId === friend._id && m.receiverId === myId))).reverse()[0];
 
-    // console.log(sms);
-    console.log(friend);
+    // console.log(lsms);
+    // console.log(friend);
 
     return (
         <div className="friend">
@@ -39,7 +40,13 @@ const Friends = ({ friend, sms, myId }) => {
                 {
                     myId === lsms?.senderId ?
                         <div className='seen-unseen'>
-                            <img src={friend.image} alt="" />
+                            {
+                                lsms?.status === 'seen' ? <img src={friend.image} alt="" /> : lsms?.status === 'delivered' ? <div className='delivered'>
+                                    <BsCheck2All />
+                                </div> : <div className='unseen'>
+                                    <HiOutlineCheckCircle />
+                                </div>
+                            }
                         </div> :
                         <div className='seen-unseen'>
                             <div className='seen-icon'></div>

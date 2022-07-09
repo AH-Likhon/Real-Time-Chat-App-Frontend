@@ -5,6 +5,9 @@ import { useSelector } from 'react-redux';
 const Message = ({ message, currentFrnd, scrollRef, typing }) => {
     const { myInfo } = useSelector(state => state.auth);
 
+    console.log(message.map(m => m.message));
+    // console.log(message.map(m => m.message?.image));
+
     return (
         <>
             <div className="message-show">

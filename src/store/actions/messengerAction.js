@@ -35,7 +35,7 @@ export const messageSend = data => async (dispatch) => {
             }
         })
     } catch (error) {
-        console.log(error.response.data)
+        console.log(error.response?.data)
     }
 }
 
@@ -111,4 +111,14 @@ export const imgMessageSend = (data) => async (dispatch) => {
         console.log(error.response.data)
     }
 
+}
+
+export const seenSMS = (sms) => async (dispatch) => {
+    // console.log(sms);
+    try {
+        const res = await axios.post('http://localhost:5000/seen-sms', sms);
+        console.log(res);
+    } catch (error) {
+        console.log(error)
+    }
 }

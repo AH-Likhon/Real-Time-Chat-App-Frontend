@@ -11,7 +11,7 @@ import Friends from './Friends';
 import RightSide from './RightSide';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFriends, messageSend, getMessage, imgMessageSend } from '../store/actions/messengerAction';
+import { getFriends, messageSend, getMessage, imgMessageSend, seenSMS } from '../store/actions/messengerAction';
 
 const Messenger = () => {
 
@@ -20,28 +20,10 @@ const Messenger = () => {
 
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
-    const [lastSMSList, setLastSMSList] = useState([]);
+    // const [lastSMSList, setLastSMSList] = useState([]);
 
 
-    const myFriends = friends.filter(friend => friend.email !== myInfo.email);
-
-    useEffect(() => {
-        fetch('http://localhost:5000/get-message')
-            .then(res => res.json())
-            .then(data => {
-                setLastSMSList(data.getAllMessage);
-                // const getAllMessage = data.getAllMessage;
-                // for (const singleFrnd of myFriends) {
-                //     console.log(getAllMessage.filter((m => (m.senderId === myInfo.id && m.receiverId === singleFrnd._id) || (m.senderId === singleFrnd._id && m.receiverId === myInfo.id))).reverse()[0]);
-
-                //     let lastSMS = getAllMessage.filter((m => (m.senderId === myInfo.id && m.receiverId === singleFrnd._id) || (m.senderId === singleFrnd._id && m.receiverId === myInfo.id))).reverse()[0];
-
-                //     lastSMSList.push(lastSMS);
-
-                //     // setLastSMSList([...lastSMSList, lastSMS]);
-                // }
-            })
-    }, []);
+    const myFriends = friends?.filter(friend => friend.email !== myInfo.email);
 
     const [currentFrnd, setCurrentFrnd] = useState('');
     // console.log(currentFrnd);
@@ -85,15 +67,6 @@ const Messenger = () => {
     const scrollRef = useRef();
     const socket = useRef();
 
-
-    // dispatch({
-    //     type: LAST_SMS,
-    //     payload: {
-    //         lastSMS: lastSMS,
-    //         // lastSMS: getLastMSG
-    //     }
-    // });
-
     console.log(socket);
 
     useEffect(() => {
@@ -130,6 +103,8 @@ const Messenger = () => {
                         message: socketMessage
                     }
                 })
+
+                dispatch(seenSMS(socketMessage));
             }
         }
 
@@ -161,8 +136,8 @@ const Messenger = () => {
         if (e.target.files.length !== 0) {
             sendingSPlay();
 
-            const imageName = e.target.files[0].name;
-            const newImageName = Date.now() + imageName;
+            // const imageName = e.target.files[0].name;
+            // const newImageName = Date.now() + imageName;
             // console.log(newImageName);
             // setSendImage(imageName);
             // setNewMessage('');
@@ -191,6 +166,7 @@ const Messenger = () => {
                 image: url,
                 time: new Date()
             });
+
 
             // reader.readAsDataURL(e.target.files[0]);
 
@@ -261,7 +237,7 @@ const Messenger = () => {
         })
 
         dispatch(messageSend(data));
-        // setLastSMS(data.slice(-1));
+
         setNewMessage('');
 
 
@@ -280,7 +256,6 @@ const Messenger = () => {
     }
 
 
-
     useEffect(() => {
         dispatch(getFriends())
     }, []);
@@ -292,7 +267,7 @@ const Messenger = () => {
     }, [friends]);
 
     useEffect(() => {
-        console.log("Frnd ID:", currentFrnd._id, "My ID:", myInfo.id);
+        // console.log("Frnd ID:", currentFrnd._id, "My ID:", myInfo.id);
         dispatch(getMessage(currentFrnd._id, myInfo.id))
     }, [currentFrnd?._id]);
 
@@ -358,7 +333,7 @@ const Messenger = () => {
                             {/* active */}
                             {
                                 myFriends && myFriends.length > 0 ? myFriends.map((friend, index) => <div onClick={() => setCurrentFrnd(friend)} className={currentFrnd._id === friend._id ? "hover-friend active" : "hover-friend"}>
-                                    <Friends key={friend._id} sms={lastSMSList} myId={myInfo.id} friend={friend} />
+                                    <Friends key={friend._id} sms={message} myId={myInfo.id} friend={friend} />
                                 </div>) : 'No friends are available now.'
                             }
                         </div>

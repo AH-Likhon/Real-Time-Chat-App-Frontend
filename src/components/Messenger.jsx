@@ -11,7 +11,7 @@ import Friends from './Friends';
 import RightSide from './RightSide';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFriends, messageSend, getMessage, imgMessageSend, seenSMS } from '../store/actions/messengerAction';
+import { getFriends, messageSend, getMessage, imgMessageSend, seenSMS, deliveredSMS } from '../store/actions/messengerAction';
 
 const Messenger = () => {
 
@@ -20,18 +20,21 @@ const Messenger = () => {
 
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
-    // const [lastSMSList, setLastSMSList] = useState([]);
+    const [lastSMSList, setLastSMSList] = useState([]);
 
 
     const myFriends = friends?.filter(friend => friend.email !== myInfo.email);
 
     const [currentFrnd, setCurrentFrnd] = useState('');
+    // const [allMessage, setAllMessage] = useState('');
     // console.log(currentFrnd);
 
-    // console.log('Last SMS:', message.slice(-1));
+    console.log('Last SMS:', message);
 
 
     // let lastSMS = message.slice(-1);
+
+    let smsMessage = message?.filter((m => (m.senderId === myInfo.id && m.receiverId === currentFrnd._id) || (m.senderId === currentFrnd._id && m.receiverId === myInfo.id)));
 
     // if (friends && message) {
     //     const getLastSMS = (myId, frndId) => {
@@ -62,22 +65,71 @@ const Messenger = () => {
     // const [sendImage, setSendImage] = useState('');
     const [activeUser, setActiveUser] = useState([]);
     const [socketMessage, setSocketMessage] = useState("");
+    const [socketSeen, setSocketSeen] = useState("");
     const [typing, setTyping] = useState('');
 
     const scrollRef = useRef();
     const socket = useRef();
 
-    console.log(socket);
+
+    // useEffect(() => {
+    //     fetch('http://localhost:5000/get-message')
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             // setSocketMessage(data.getAllMessage);
+    //             const getAllMessage = data.getAllMessage;
+    //             // console.log(getAllMessage);
+    //             setLastSMSList([...lastSMSList, getAllMessage]);
+    //             // for (const singleFrnd of myFriends) {
+    //             //     console.log(getAllMessage.filter((m => (m.senderId === myInfo.id && m.receiverId === singleFrnd._id) || (m.senderId === singleFrnd._id && m.receiverId === myInfo.id))));
+
+    //             //     const lastSMS = getAllMessage.filter((m => (m.senderId === myInfo.id && m.receiverId === singleFrnd._id) || (m.senderId === singleFrnd._id && m.receiverId === myInfo.id))).reverse()[0];
+
+    //             //     // console.log(lastSMS);
+    //             //     // lastSMSList.push(lastSMS);
+
+    //             //     
+    //             // }
+    //         })
+    // }, []);
+
+    // console.log(socketMessage);
+
+    // console.log(socket);
 
     useEffect(() => {
         socket.current = io('ws://localhost:8000');
         socket.current.on('getMessage', data => {
             setSocketMessage(data);
+            // setSocketSeen(data);
+            // setSocketAllMessage([...socketAllMessage, data]);
+            // console.log(socketAllMessage);
+        })
+        socket.current.on('seenSmsRes', data => {
+            dispatch(seenSMS(data));
+            // dispatch({
+            //     type: 'SEEN_SMS',
+            //     payload: {
+            //         sms: data,
+            //     }
+        })
+        // setSocketMessage(data);
+        // dispatch(seenSMS(data));
+        // });
+
+        socket.current.on('deliveredSmsRes', data => {
+            dispatch(deliveredSMS(data));
+            // dispatch({
+            //     type: 'DELIVERED_SMS',
+            //     payload: {
+            //         sms: data,
+            //     }
+            // })
         })
 
         socket.current.on('getTyping', (data) => {
             setTyping(data);
-            console.log(data);
+            // console.log(data);
         })
     }, []);
 
@@ -104,7 +156,9 @@ const Messenger = () => {
                     }
                 })
 
-                dispatch(seenSMS(socketMessage));
+                // dispatch(seenSMS(socketMessage));
+
+                socket.current.emit('seenSMS', socketMessage);
             }
         }
 
@@ -117,6 +171,10 @@ const Messenger = () => {
         if (socketMessage && socketMessage.senderId !== currentFrnd._id && socketMessage.receiverId === myInfo.id) {
             notificationSPlay();
             toast.success(`${socketMessage.senderName} sent a new message`);
+
+            // dispatch(deliveredSMS(socketMessage));
+
+            socket.current.emit('deliveredSMS', socketMessage);
         }
     }, [socketMessage])
 
@@ -156,16 +214,16 @@ const Messenger = () => {
             const url = URL.createObjectURL(e.target.files[0]);
             console.log(url);
 
-            socket.current.emit('sendMessage', {
-                senderId: myInfo.id,
-                senderName: myInfo.userName,
-                receiverId: currentFrnd._id,
-                receiverName: currentFrnd.userName,
-                message: '',
-                // image: newImageName,
-                image: url,
-                time: new Date()
-            });
+            // socket.current.emit('sendMessage', {
+            //     senderId: myInfo.id,
+            //     senderName: myInfo.userName,
+            //     receiverId: currentFrnd._id,
+            //     receiverName: currentFrnd.userName,
+            //     message: '',
+            //     // image: newImageName,
+            //     image: url,
+            //     time: new Date()
+            // });
 
 
             // reader.readAsDataURL(e.target.files[0]);
@@ -188,14 +246,44 @@ const Messenger = () => {
 
             // dispatch(imgMessageSend(formData));
 
+            let uid = new Date().getTime().toString(36) + Math.floor(new Date().valueOf() * Math.random());
+            // let status = ' ';
+
+            // if (socketMessage && currentFrnd) {
+            //     if (socketMessage.senderId === currentFrnd._id && socketMessage.receiverId === myInfo.id) {
+            //         status = 'seen';
+            //     } else {
+            //         status = 'delivered';
+            //     }
+            // } else {
+            //     status = 'unseen'
+            // }
+
+            // console.log('status', status)
+
             const data = {
+                uid,
                 senderId: newData.senderId,
                 senderName: newData.senderName,
                 receiverId: newData.receiverId,
                 receiverName: newData.receiverName,
                 message: '',
-                image: newData.image
+                image: newData.image,
+                status: 'unseen',
             };
+
+            socket.current.emit('sendMessage', {
+                uid,
+                senderId: myInfo.id,
+                senderName: myInfo.userName,
+                receiverId: currentFrnd._id,
+                receiverName: currentFrnd.userName,
+                message: '',
+                image: newData.image,
+                time: new Date(),
+                // status: 'unseen',
+                status: 'unseen',
+            })
 
             dispatch(imgMessageSend(data));
 
@@ -210,25 +298,42 @@ const Messenger = () => {
 
         sendingSPlay();
 
+        let uid = new Date().getTime().toString(36) + Math.floor(new Date().valueOf() * Math.random());
+
         // console.log(newMessage);
-        const data = {
-            senderId: myInfo.id,
-            senderName: myInfo.userName,
-            receiverId: currentFrnd._id,
-            receiverName: currentFrnd.userName,
-            message: newMessage ? newMessage : '❤️',
-            image: ''
-        };
+
 
         socket.current.emit('sendMessage', {
+            uid,
             senderId: myInfo.id,
             senderName: myInfo.userName,
             receiverId: currentFrnd._id,
             receiverName: currentFrnd.userName,
             message: newMessage ? newMessage : '❤️',
             image: '',
-            time: new Date()
+            time: new Date(),
+            status: 'unseen',
         })
+
+        // console.log(socketMessage);
+
+        const data = {
+            uid,
+            senderId: myInfo.id,
+            senderName: myInfo.userName,
+            receiverId: currentFrnd._id,
+            receiverName: currentFrnd.userName,
+            message: newMessage ? newMessage : '❤️',
+            image: '',
+            status: 'unseen',
+        };
+
+        console.log(currentFrnd);
+        // console.log('Check status:', myFriends && myFriends.includes(currentFrnd) ? 'seen' : myFriends && !myFriends.includes(currentFrnd) ? 'delivered' : 'unseen')
+        // console.log('Check status:', currentFrnd && currentFrnd._id === currentFrnd._id ? 'seen' : currentFrnd && currentFrnd._id === myInfo.id ? 'delivered' : 'unseen')
+
+
+
 
         socket.current.emit('typing', {
             senderId: myInfo.id,
@@ -237,12 +342,21 @@ const Messenger = () => {
         })
 
         dispatch(messageSend(data));
+        // dispatch(getMessage());
 
         setNewMessage('');
 
 
         console.log(data);
     }
+
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/get-message")
+    //         .then(res => res.json())
+    //         .then(data => setLastSMSList(data.getAllMessage));
+    // }, []);
+
+    // console.log(lastSMSList);
 
     const emojiSend = emoji => {
         setNewMessage(`${newMessage}` + emoji);
@@ -268,11 +382,17 @@ const Messenger = () => {
 
     useEffect(() => {
         // console.log("Frnd ID:", currentFrnd._id, "My ID:", myInfo.id);
-        dispatch(getMessage(currentFrnd._id, myInfo.id))
+        dispatch(getMessage(currentFrnd._id, myInfo.id));
+
+        // dispatch(seenSMS(socketSeen));
     }, [currentFrnd?._id]);
 
     useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+        // let smsLastOne = message.filter((m => (m.senderId === myInfo.id && m.receiverId === currentFrnd._id) || (m.senderId === currentFrnd._id && m.receiverId === myInfo.id))).slice(-1);
+        // console.log(smsLastOne[0]);
+        // dispatch(seenSMS(smsLastOne[0]));
     }, [message])
 
     return (
@@ -351,7 +471,8 @@ const Messenger = () => {
                         newMessage={newMessage}
                         handleInput={handleInput}
                         sendMessage={sendMessage}
-                        message={message}
+                        // message={message}
+                        message={smsMessage}
                         scrollRef={scrollRef}
                         emojiSend={emojiSend}
                         imageSend={imageSend}

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS } from "../types/messengerTypes";
+import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS } from "../types/messengerTypes";
 
 export const getFriends = () => async (dispatch) => {
     try {
@@ -31,11 +31,12 @@ export const messageSend = data => async (dispatch) => {
         dispatch({
             type: MESSAGE_SEND_SUCCESS,
             payload: {
-                message: response.data.message
+                message: response.data.message,
             }
         })
     } catch (error) {
-        console.log(error.response?.data)
+        console.log(error)
+        // console.log(error.response?.data)
     }
 }
 
@@ -76,10 +77,14 @@ export const getMessage = (frndId, myId) => {
 
             // console.log("last SMS", getLastMSG);
 
+            // console.log(getAllMessage);
+
             dispatch({
                 type: MESSAGE_GET_SUCCESS,
                 payload: {
-                    message: getAllMessage,
+                    // message: getAllMessage,
+                    message: response.data.getAllMessage,
+                    // allMessage: response.data.getAllMessage
                     // lastSMS: getLastMSG
                 }
             });
@@ -116,8 +121,47 @@ export const imgMessageSend = (data) => async (dispatch) => {
 export const seenSMS = (sms) => async (dispatch) => {
     // console.log(sms);
     try {
-        const res = await axios.post('http://localhost:5000/seen-sms', sms);
-        console.log(res);
+        const res = await axios.put('http://localhost:5000/seen-sms', sms);
+        // console.log(res);
+        const response = await axios.get("http://localhost:5000/get-message");
+        // const value = response.data.getAllMessage.slice(-1)[0].status
+        // console.log(response.data.getAllMessage.slice(-1)[0]);
+        // const newArr = response.data.getAllMessage.map(object => {
+        //     if (object.uid === sms.uid) {
+        //         // 👇️ change value of name property
+        //         return { ...object, status: 'seen' };
+        //     }
+        //     return object;
+        // });
+        // console.log();
+        dispatch({
+            type: SEEN_SMS,
+            payload: {
+                sms: sms,
+            }
+        });
+
+
+        // console.log(response.data.getAllMessage.slice(-1)[0].status === 'seen');
+        // console.log(response.data.getAllMessage.includes(sms));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deliveredSMS = (sms) => async (dispatch) => {
+    // console.log(sms);
+    try {
+        await axios.put('http://localhost:5000/seen-sms', sms);
+        // console.log(res);
+        await axios.get("http://localhost:5000/get-message");
+
+        dispatch({
+            type: DELIVERED_SMS,
+            payload: {
+                sms: sms,
+            }
+        });
     } catch (error) {
         console.log(error)
     }

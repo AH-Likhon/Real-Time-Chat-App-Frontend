@@ -1,5 +1,5 @@
 import axios from "axios"
-import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS } from "../types/messengerTypes";
+import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS, UPDATE } from "../types/messengerTypes";
 
 export const getFriends = () => async (dispatch) => {
     try {
@@ -121,9 +121,10 @@ export const imgMessageSend = (data) => async (dispatch) => {
 export const seenSMS = (sms) => async (dispatch) => {
     // console.log(sms);
     try {
-        const res = await axios.put('http://localhost:5000/seen-sms', sms);
+        // let lsms = { ...sms, status: 'seen' }
+        await axios.put('http://localhost:5000/seen-sms', sms);
         // console.log(res);
-        const response = await axios.get("http://localhost:5000/get-message");
+        await axios.get("http://localhost:5000/get-message");
         // const value = response.data.getAllMessage.slice(-1)[0].status
         // console.log(response.data.getAllMessage.slice(-1)[0]);
         // const newArr = response.data.getAllMessage.map(object => {
@@ -152,12 +153,32 @@ export const seenSMS = (sms) => async (dispatch) => {
 export const deliveredSMS = (sms) => async (dispatch) => {
     // console.log(sms);
     try {
+        // let lsms = { ...sms, status: 'delivered' }
         await axios.put('http://localhost:5000/seen-sms', sms);
         // console.log(res);
         await axios.get("http://localhost:5000/get-message");
 
         dispatch({
             type: DELIVERED_SMS,
+            payload: {
+                sms: sms,
+            }
+        });
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+export const updateSeenSMSRes = (sms) => async (dispatch) => {
+    // console.log(sms);
+    try {
+        // let lsms = { ...sms, status: 'delivered' }
+        await axios.put('http://localhost:5000/seen-sms', sms);
+        // console.log(res);
+        await axios.get("http://localhost:5000/get-message");
+
+        dispatch({
+            type: UPDATE,
             payload: {
                 sms: sms,
             }

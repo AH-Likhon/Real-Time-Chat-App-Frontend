@@ -48,7 +48,7 @@ const Friends = ({ friend, sms, myId }) => {
                         }
 
                         {
-                            lsms && lsms?.message?.text ? <span>{lsms?.message?.text.slice(0, 10)}</span> : lsms?.message?.image ? <span>sent a image</span> : <span>connected with you</span>
+                            lsms && lsms?.message?.text ? <span>{lsms?.message?.text.slice(0, 10)}</span> : lsms?.message?.image ? <span>sent a image</span> : <span> {friend?.userName} connected with you</span>
                         }
                         {/* {
                             lsms === undefined && !lsms?.message?.text && !lsms?.message?.image ? <span>connected you</span> : ""

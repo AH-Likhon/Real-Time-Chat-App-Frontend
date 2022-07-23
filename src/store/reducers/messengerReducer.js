@@ -1,4 +1,4 @@
-import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS, SOCKET_MESSAGE, UPDATE_FRND_SMS } from "../types/messengerTypes";
+import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS, SOCKET_MESSAGE, UPDATE, UPDATE_FRND_SMS } from "../types/messengerTypes";
 
 const messengerState = {
     friends: [],
@@ -51,15 +51,16 @@ export const messengerReducer = (state = messengerState, action) => {
 
         if (index !== -1) {
             state.message[index] = payload.sms;
-            console.log(state.message);
+            // console.log(state.message);
             return {
                 ...state
                 // message: [...state.message]
             };
-        } else {
-            console.log(state.message);
-            return state;
         }
+        // else {
+        //     console.log(state.message);
+        //     return state;
+        // }
     }
 
     if (type === DELIVERED_SMS) {
@@ -69,14 +70,30 @@ export const messengerReducer = (state = messengerState, action) => {
 
         if (index !== -1) {
             state.message[index] = payload.sms;
-            console.log(state.message);
+            // console.log(state.message);
             return {
                 ...state
                 // message: [...state.message]
             };
-        } else {
+        }
+        // else {
+        //     console.log(state.message);
+        //     return {
+        //         ...state,
+        //         message: [...state.message, payload.sms]
+        //     };
+        // }
+    }
+
+    if (type === UPDATE) {
+        const index = state.message.findIndex(m => m.uid === payload.sms.uid);
+
+        if (index !== -1) {
+            state.message[index] = payload.sms;
             console.log(state.message);
-            return state;
+            return {
+                ...state
+            };
         }
     }
 

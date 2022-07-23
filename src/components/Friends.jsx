@@ -1,13 +1,14 @@
-import axios from 'axios';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { BsCheck2All } from 'react-icons/bs';
 import { HiOutlineCheckCircle } from 'react-icons/hi';
 import { RiCheckboxCircleFill } from 'react-icons/ri';
 
-const Friends = ({ friend, sms, myId }) => {
+const Friends = ({ friend, sms, myId, activeUser }) => {
 
     let lsms = sms.filter((m => (m.senderId === myId && m.receiverId === friend._id) || (m.senderId === friend._id && m.receiverId === myId))).slice(-1)[0];
+
+    console.log(activeUser);
 
     // const [allMessage, setAllMessage] = useState([])
 
@@ -36,19 +37,22 @@ const Friends = ({ friend, sms, myId }) => {
             <div className="friend-image">
                 <div className="image">
                     <img src={friend.image} alt="" />
+                    {
+                        activeUser && activeUser.length > 0 && activeUser.some(user => user.userId === friend._id) ? <div className="active-icon"></div> : ''
+                    }
                 </div>
             </div>
 
             <div className='friend-name-seen'>
                 <div className="friend-name">
-                    <h4>{friend?.userName}</h4>
+                    <h4 className={lsms.senderId !== myId && lsms.status !== undefined && lsms.status !== 'seen' ? 'unseen_sms' : ''}>{friend?.userName}</h4>
                     <div className='sms-time'>
                         {
-                            lsms && lsms.senderId === myId ? <span>You: sent</span> : lsms !== undefined ? <span>{lsms?.senderName.slice(0, 5)}: sent</span> : ""
+                            lsms && lsms.senderId === myId ? <span>You: sent</span> : lsms !== undefined ? <span className={lsms.senderId !== myId && lsms.status !== undefined && lsms.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.senderName.slice(0, 5)}: sent</span> : ""
                         }
 
                         {
-                            lsms && lsms?.message?.text ? <span>{lsms?.message?.text.slice(0, 10)}</span> : lsms?.message?.image ? <span>sent a image</span> : <span> {friend?.userName} connected with you</span>
+                            lsms && lsms?.message?.text ? <span className={lsms.senderId !== myId && lsms.status !== undefined && lsms.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.message?.text.slice(0, 10)}</span> : lsms?.message?.image ? <span>sent a image</span> : <span> {friend?.userName} connected with you</span>
                         }
                         {/* {
                             lsms === undefined && !lsms?.message?.text && !lsms?.message?.image ? <span>connected you</span> : ""

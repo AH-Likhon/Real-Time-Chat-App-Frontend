@@ -7,6 +7,25 @@
     overflow: hidden;
   }
 
+  .friend_connect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    color: #fff;
+
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+
+    h3 {
+      margin-top: 10px;
+    }
+  }
+
   .my-message {
     float: right;
 
@@ -15,11 +34,16 @@
       align-items: flex-end;
       justify-content: flex-end;
       width: 370px;
+      overflow-wrap: anywhere;
 
       .message-text {
+        // width: auto;
+        // height: auto;
         text-align: end;
-        padding: 10px;
-        border-radius: 10px;
+        padding: 7px 20px;
+        border-radius: 5px;
+        position: relative;
+        text-align: justify;
 
         img {
           width: 220px;
@@ -28,6 +52,21 @@
           border-radius: 5px;
           overflow: hidden;
           object-fit: cover;
+        }
+
+        img.img,
+        span {
+          width: 12px;
+          height: 12px;
+          color: #fff;
+          border-radius: 50%;
+          position: absolute;
+          bottom: 5px;
+          right: 5px;
+        }
+
+        .delivered {
+          color: #7FFFD4;
         }
       }
     }
@@ -49,12 +88,14 @@
       justify-content: flex-start;
       width: 370px;
       color: white;
+      overflow-wrap: anywhere;
       // padding: 8px;
       // border-radius: 5px;
 
       .message-text {
         text-align: start;
-        border-radius: 10px;
+        padding: 7px 20px;
+        border-radius: 5px;
         // background-color: #28324ed9;
 
         img {

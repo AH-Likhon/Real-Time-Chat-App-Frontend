@@ -480,7 +480,7 @@ const Messenger = () => {
                             {/* active */}
                             {
                                 myFriends && myFriends.length > 0 ? myFriends.map((friend, index) => <div onClick={() => setCurrentFrnd(friend)} className={currentFrnd._id === friend._id ? "hover-friend active" : "hover-friend"}>
-                                    <Friends key={friend._id} sms={message} myId={myInfo.id} friend={friend} />
+                                    <Friends key={friend._id} activeUser={activeUser} sms={message} myId={myInfo.id} friend={friend} />
                                 </div>) : 'No friends are available now.'
                             }
                         </div>

@@ -27,15 +27,28 @@
 
       .friend-image {
         .image {
-          width: 45px;
-          height: 45px;
-          overflow: hidden;
-          border-radius: 50%;
+          // overflow: hidden;
           margin-right: 10px;
+          position: relative;
 
           img {
-            width: 100%;
-            height: 100%;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            // width: 100%;
+            // height: 100%;
+          }
+
+          .active-icon {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #1bdf35;
+            right: 0px;
+            bottom: 6px;
+            // border: 1px solid #fff;
           }
         }
       }
@@ -58,11 +71,19 @@
             font-weight: 400;
           }
 
+          h4.unseen_sms {
+            font-weight: 700 ! important;
+          }
+
           .sms-time {
             span {
               color: #fff;
               font-size: 12px;
               margin: 0px 1px;
+            }
+
+            span.unseen_sms {
+              font-weight: 700 ! important;
             }
           }
         }

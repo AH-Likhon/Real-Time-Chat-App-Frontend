@@ -45,14 +45,14 @@ const Friends = ({ friend, sms, myId, activeUser }) => {
 
             <div className='friend-name-seen'>
                 <div className="friend-name">
-                    <h4 className={lsms.senderId !== myId && lsms.status !== undefined && lsms.status !== 'seen' ? 'unseen_sms' : ''}>{friend?.userName}</h4>
+                    <h4 className={lsms?.senderId !== myId && lsms?.status !== undefined && lsms?.status !== 'seen' ? 'unseen_sms' : ''}>{friend?.userName}</h4>
                     <div className='sms-time'>
                         {
-                            lsms && lsms.senderId === myId ? <span>You: sent</span> : lsms !== undefined ? <span className={lsms.senderId !== myId && lsms.status !== undefined && lsms.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.senderName.slice(0, 5)}: sent</span> : ""
+                            lsms && lsms.senderId === myId ? <span>You: sent</span> : lsms !== undefined ? <span className={lsms?.senderId !== myId && lsms?.status !== undefined && lsms?.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.senderName.slice(0, 5)}: sent</span> : ""
                         }
 
                         {
-                            lsms && lsms?.message?.text ? <span className={lsms.senderId !== myId && lsms.status !== undefined && lsms.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.message?.text.slice(0, 10)}</span> : lsms?.message?.image ? <span>sent a image</span> : <span> {friend?.userName} connected with you</span>
+                            lsms && lsms?.message?.text ? <span className={lsms?.senderId !== myId && lsms?.status !== undefined && lsms?.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.message?.text.slice(0, 10)}</span> : lsms?.message?.image ? <span>sent a image</span> : <span> {friend?.userName} connected with you</span>
                         }
                         {/* {
                             lsms === undefined && !lsms?.message?.text && !lsms?.message?.image ? <span>connected you</span> : ""

@@ -1,6 +1,6 @@
 import axios from 'axios';
 // import { dispatch } from 'react-hot-toast/dist/core/store';
-import { REGISTER_FAIL, REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS } from '../types/authType';
+import { LOGOUT_SUCCESS, REGISTER_FAIL, REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS } from '../types/authType';
 // import {
 //     REGISTER_FAIL,
 //     REGISTER_SUCCESS,
@@ -79,11 +79,11 @@ export const userRegister = (data) => {
         try {
             const response = await axios.post('http://localhost:5000/users', data, config);
 
-            const res = await axios.post('http://localhost:5000/user-login', data, config);
-            
+            // await axios.post('http://localhost:5000/login', data, config);
+
             console.log(response.data);
 
-            if(response.data.error){
+            if (response.data.error) {
                 dispatch({
                     type: REGISTER_FAIL,
                     payload: {
@@ -92,7 +92,7 @@ export const userRegister = (data) => {
                 })
             }
 
-            if(response.data.successMessage){
+            if (response.data.successMessage) {
                 localStorage.setItem('authToken', response.data.token);
 
                 dispatch({
@@ -131,12 +131,12 @@ export const userLogin = (data) => {
         // console.log(data);
 
         try {
-            const response = await axios.post('http://localhost:5000/user-login', data, config);
-            
+            const response = await axios.post('http://localhost:5000/login', data, config);
+
             // response.set("Access-Control-Allow-Origin", "*");
             console.log(response.data);
 
-            if(response.data.error){
+            if (response.data.error) {
                 dispatch({
                     type: USER_LOGIN_FAIL,
                     payload: {
@@ -145,9 +145,9 @@ export const userLogin = (data) => {
                 })
             }
 
-            if(response.data.successMessage){
+            if (response.data.successMessage) {
                 localStorage.setItem('authToken', response.data.token);
-                
+
                 dispatch({
                     type: USER_LOGIN_SUCCESS,
                     payload: {
@@ -173,7 +173,7 @@ export const userLogin = (data) => {
 //         }
 
 //         try {
-//             const response = await axios.post('/api/messenger/user-login', data, config);
+//             const response = await axios.post('/api/messenger/login', data, config);
 //             localStorage.setItem('authToken', response.data.token);
 //             dispath({
 //                 type: USER_LOGIN_SUCCESS,
@@ -203,6 +203,26 @@ export const userLogin = (data) => {
 //             })
 //         }
 //     } catch (error) {
-        
+
 //     }
 // }
+
+export const userLogOut = (data) => async (dispatch) => {
+    console.log("logout", data);
+
+    try {
+
+        const res = await axios.delete(`http://localhost:5000/logout/${data.id}`);
+
+        console.log(res.data);
+
+        if (res.data.successMessage) {
+            localStorage.removeItem('authToken');
+            dispatch({
+                type: LOGOUT_SUCCESS
+            })
+        }
+    } catch (error) {
+
+    }
+}

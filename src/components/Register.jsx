@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { userRegister } from "../store/actions/authAction";
+import { userLogin, userRegister } from "../store/actions/authAction";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import { SUCCESS_MESSAGE_CLEAR, ERROR_CLEAR } from '../store/types/authType';
@@ -145,8 +145,10 @@ const Register = () => {
         //     alert.removeAll();
         // }
 
-        if (authenticate) {
+        if (authenticate && successMessage) {
             history('/messenger');
+            console.log('Registration State', state);
+            dispatch(userLogin(state));
         }
 
         if (!click && successMessage) {

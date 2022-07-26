@@ -12,6 +12,8 @@ import RightSide from './RightSide';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFriends, messageSend, getMessage, imgMessageSend, seenSMS, deliveredSMS, updateSeenSMSRes } from '../store/actions/messengerAction';
+import { IoLogOutOutline } from 'react-icons/io5';
+import { userLogOut } from '../store/actions/authAction';
 
 const Messenger = () => {
 
@@ -20,7 +22,8 @@ const Messenger = () => {
 
     const { friends, message } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
-    const [lastSMSList, setLastSMSList] = useState([]);
+    // const [lastSMSList, setLastSMSList] = useState([]);
+    const [darkMode, setDarkMode] = useState(true);
 
 
     const myFriends = friends?.filter(friend => friend.email !== myInfo.email);
@@ -29,7 +32,7 @@ const Messenger = () => {
     // const [allMessage, setAllMessage] = useState('');
     // console.log(currentFrnd);
 
-    console.log('Last SMS:', message);
+    // console.log('Last SMS:', message);
 
 
     // let lastSMS = message.slice(-1);
@@ -420,7 +423,11 @@ const Messenger = () => {
         // let smsLastOne = message.filter((m => (m.senderId === myInfo.id && m.receiverId === currentFrnd._id) || (m.senderId === currentFrnd._id && m.receiverId === myInfo.id))).slice(-1);
         // console.log(smsLastOne[0]);
         // dispatch(seenSMS(smsLastOne[0]));
-    }, [message])
+    }, [message]);
+
+    const logOut = () => {
+        dispatch(userLogOut(myInfo));
+    }
 
     return (
         <div className="messenger">
@@ -451,11 +458,25 @@ const Messenger = () => {
                             </div>
 
                             <div className="icons">
-                                <div className="icon">
+                                <div className="icon" onClick={() => setDarkMode(!darkMode)}>
                                     <BsThreeDots />
                                 </div>
                                 <div className="icon">
                                     <FaEdit />
+                                </div>
+                                <div className={darkMode ? 'theme_logout' : 'theme_logout shown'}>
+                                    <h3>Dark Mode</h3>
+                                    <div className='on'>
+                                        <label htmlFor='dark'>ON</label>
+                                        <input value="dark" type="radio" name='theme' id='dark' />
+                                    </div>
+                                    <div className='off'>
+                                        <label htmlFor='white'>OFF</label>
+                                        <input value="white" type="radio" name='theme' id='white' />
+                                    </div>
+                                    <div onClick={logOut} className='logout'>
+                                        <IoLogOutOutline /> LogOut
+                                    </div>
                                 </div>
                             </div>
                         </div>

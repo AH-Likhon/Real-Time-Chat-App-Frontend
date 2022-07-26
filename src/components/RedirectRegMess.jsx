@@ -1,16 +1,16 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const PrivateRoute = ({ children, ...rest }) => {
+const RedirectRegMess = ({ children, ...rest }) => {
     const { authenticate } = useSelector(state => state.auth);
     let location = useLocation();
 
-    if (authenticate) {
+    if (!authenticate) {
         return children;
     };
 
-    return <Navigate to="/login" state={{ from: location }} />
+    return <Navigate to="/messenger" state={{ from: location }} />
 };
 
-export default PrivateRoute;
+export default RedirectRegMess;

@@ -3,10 +3,11 @@
   padding: 0px;
   box-sizing: border-box;
 }
+
 :root {
   --text-white: #fff;
   --bg-color: #ffffff;
-  --text-color: #050505;
+  --text-black: #050505;
   --icon-bg-color: #f5f5f5;
   --icon-color: #414141;
   --search-bg: #868e991a;
@@ -21,13 +22,14 @@
   --active-icon-color: #5ad539;
   --hover-color: #bcbcc091;
 }
+
 body {
   background-color: var(--bg-color);
   font-family: "Roboto", sans-serif;
 }
 
 .messenger.theme {
-  --text-color: #fff;
+  --text-black: #fff;
   --bg-color: #141b2bf0;
   --border-color: #213156bf;
   --icon-bg-color: #0a0a1357;
@@ -45,9 +47,11 @@ body {
   --active-icon-color: #5ad539;
   --image-border-color: #fff;
 }
+
 a {
   text-decoration: none;
 }
+
 li {
   list-style: none;
 }

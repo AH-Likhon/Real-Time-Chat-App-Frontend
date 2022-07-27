@@ -11,7 +11,7 @@ import Friends from './Friends';
 import RightSide from './RightSide';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFriends, messageSend, getMessage, imgMessageSend, seenSMS, deliveredSMS, updateSeenSMSRes } from '../store/actions/messengerAction';
+import { getFriends, messageSend, getMessage, imgMessageSend, seenSMS, deliveredSMS, updateSeenSMSRes, getTheme, themeSet } from '../store/actions/messengerAction';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { userLogOut } from '../store/actions/authAction';
 
@@ -20,11 +20,12 @@ const Messenger = () => {
     const [notificationSPlay] = useSound(notification);
     const [sendingSPlay] = useSound(sending);
 
-    const { friends, message } = useSelector(state => state.messenger);
+    const { friends, message, themeMode } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
     // const [lastSMSList, setLastSMSList] = useState([]);
     const [darkMode, setDarkMode] = useState(true);
 
+    console.log('Check theme', themeMode);
 
     const myFriends = friends?.filter(friend => friend.email !== myInfo.email);
 
@@ -138,12 +139,18 @@ const Messenger = () => {
             //         sms: data,
             //     }
             // })
-        })
+        });
 
         socket.current.on('getTyping', (data) => {
             setTyping(data);
             // console.log(data);
-        })
+        });
+
+        // socket.current.on('logoutUser', (userInfo) => {
+        //     console.log(userInfo);
+        //     dispatch(userLogOut(userInfo));
+        // });
+
     }, []);
 
     useEffect(() => {
@@ -419,18 +426,19 @@ const Messenger = () => {
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-        // let smsLastOne = message.filter((m => (m.senderId === myInfo.id && m.receiverId === currentFrnd._id) || (m.senderId === currentFrnd._id && m.receiverId === myInfo.id))).slice(-1);
-        // console.log(smsLastOne[0]);
-        // dispatch(seenSMS(smsLastOne[0]));
     }, [message]);
 
     const logOut = () => {
         dispatch(userLogOut(myInfo));
+        socket.current.emit('logout', myInfo);
     }
 
+    useEffect(() => {
+        dispatch(getTheme())
+    }, [])
+
     return (
-        <div className="messenger">
+        <div className={themeMode === 'dark' ? 'messenger theme' : 'messenger'}>
 
             <Toaster
                 position={'top-right'}
@@ -468,11 +476,11 @@ const Messenger = () => {
                                     <h3>Dark Mode</h3>
                                     <div className='on'>
                                         <label htmlFor='dark'>ON</label>
-                                        <input value="dark" type="radio" name='theme' id='dark' />
+                                        <input onChange={(e) => dispatch(themeSet(e.target.value))} value="dark" type="radio" name='theme' id='dark' />
                                     </div>
                                     <div className='off'>
                                         <label htmlFor='white'>OFF</label>
-                                        <input value="white" type="radio" name='theme' id='white' />
+                                        <input onChange={(e) => dispatch(themeSet(e.target.value))} value="white" type="radio" name='theme' id='white' />
                                     </div>
                                     <div onClick={logOut} className='logout'>
                                         <IoLogOutOutline /> LogOut
@@ -489,11 +497,11 @@ const Messenger = () => {
                         </div>
 
                         {/* Start Active Friends */}
-                        <div className="active-friends">
+                        {/* <div className="active-friends">
                             {
                                 activeUser && activeUser.length > 0 ? activeUser.map((user, index) => <ActiveFriend key={index} user={user} setCurrentFrnd={setCurrentFrnd} />) : ''
                             }
-                        </div>
+                        </div> */}
                         {/* End Active Friends */}
 
                         {/* Start Friends  */}

@@ -13,7 +13,8 @@
     align-items: center;
     justify-content: center;
     margin-top: 10px;
-    color: #fff;
+    color: var(--text-black);
+    // color: #fff;
 
     img {
       width: 100px;
@@ -35,6 +36,11 @@
       justify-content: flex-end;
       width: 370px;
       overflow-wrap: anywhere;
+
+      .mine {
+        background-color: var(--my-message-bg);
+        color: var(--text-white);
+      }
 
       .message-text {
         // width: auto;
@@ -58,7 +64,8 @@
         span {
           width: 12px;
           height: 12px;
-          color: #fff;
+          color: var(--text-black);
+          // color: #fff;
           border-radius: 50%;
           position: absolute;
           bottom: 5px;
@@ -66,7 +73,8 @@
         }
 
         .delivered {
-          color: #7FFFD4;
+          color: #1bdf35;
+          // color: #7FFFD4;
         }
       }
     }
@@ -87,10 +95,15 @@
       align-items: flex-end;
       justify-content: flex-start;
       width: 370px;
-      color: white;
+      // color: white;
       overflow-wrap: anywhere;
       // padding: 8px;
       // border-radius: 5px;
+
+      .frnd {
+        background-color: var(--fd-message-bg);
+        color: var(--text-black);
+      }
 
       .message-text {
         text-align: start;

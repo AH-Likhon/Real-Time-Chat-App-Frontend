@@ -146,9 +146,10 @@ const Register = () => {
         // }
 
         if (authenticate && successMessage) {
-            history('/messenger');
+            history('/login');
+            // history('/messenger');
             console.log('Registration State', state);
-            dispatch(userLogin(state));
+            // dispatch(userLogin(state));
         }
 
         if (!click && successMessage) {

@@ -94,6 +94,7 @@ export const userRegister = (data) => {
 
             if (response.data.successMessage) {
                 localStorage.setItem('authToken', response.data.token);
+                await axios.post('http://localhost:5000/login', data, config);
 
                 dispatch({
                     type: REGISTER_SUCCESS,

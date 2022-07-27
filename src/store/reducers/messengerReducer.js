@@ -1,8 +1,9 @@
-import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS, SOCKET_MESSAGE, UPDATE, UPDATE_FRND_SMS } from "../types/messengerTypes";
+import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, GET_THEME, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS, SET_THEME, SOCKET_MESSAGE, UPDATE } from "../types/messengerTypes";
 
 const messengerState = {
     friends: [],
     message: [],
+    themeMode: ''
     // allMessage: []
     // smsSendSuccess: false
 }
@@ -94,6 +95,13 @@ export const messengerReducer = (state = messengerState, action) => {
             return {
                 ...state
             };
+        }
+    }
+
+    if (type === GET_THEME || SET_THEME) {
+        return {
+            ...state,
+            themeMode: payload?.theme
         }
     }
 

@@ -4,27 +4,34 @@
   justify-content: space-between;
   align-items: center;
   padding: 5px;
+
   .file {
     display: flex;
     padding: 8px;
     font-size: 20px;
     cursor: pointer;
-    color: #fff;
+    // color: #fff;
+    color: var(--icon-color);
+
     label {
       display: flex;
       align-items: center;
       margin-bottom: 0px;
       cursor: pointer;
+      color: var(--icon-color);
     }
+
     #pic {
       display: none;
     }
+
     .add-image,
     .add-attachment,
     .add-gift {
       position: fixed;
       padding: 4px;
       background-color: #212d44;
+      color: var(--text-white);
       font-size: 14px;
       bottom: 44px;
       display: none;
@@ -33,22 +40,27 @@
 
   .hover-attachment {
     position: relative;
+
     &:hover {
       .add-attachment {
         display: block;
       }
     }
   }
+
   .hover-image {
     position: relative;
+
     &:hover {
       .add-image {
         display: block;
       }
     }
   }
+
   .hover-gift {
     position: relative;
+
     &:hover {
       .add-gift {
         display: block;
@@ -63,7 +75,8 @@
     height: 40px;
     border: none;
     border-radius: 50px;
-    background-color: #15162559;
+    background-color: var(--search-bg);
+    // background-color: #15162559;
 
     .form-control {
       width: 100%;
@@ -71,6 +84,9 @@
       border-top-left-radius: 50px;
       background-color: transparent;
       border: none;
+      &::placeholder{
+        color: var(--text-white);
+      }
     }
 
     label {
@@ -90,10 +106,12 @@
     border-radius: 8px;
     border-bottom-right-radius: 0px;
     display: none;
+
     .emoji {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       grid-gap: 4px;
+
       span {
         cursor: pointer;
       }
@@ -104,7 +122,7 @@
     display: none;
   }
 
-  #emoji:checked ~ .emoji-section {
+  #emoji:checked~.emoji-section {
     display: block;
   }
 }

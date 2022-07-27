@@ -6,3 +6,5 @@ export const UPDATE_FRND_SMS = 'UPDATE_FRND_SMS';
 export const SEEN_SMS = 'SEEN_SMS';
 export const DELIVERED_SMS = 'DELIVERED_SMS';
 export const UPDATE = 'UPDATE';
+export const GET_THEME = 'GET_THEME';
+export const SET_THEME = 'SET_THEME,';

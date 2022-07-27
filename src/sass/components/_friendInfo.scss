@@ -4,17 +4,20 @@
   flex-direction: column;
   padding: 12px 15px;
   height: 100%;
+
   .image-name {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin-bottom: 5px;
+
     .image {
       height: 70px;
       width: 70px;
       border-radius: 50%;
       overflow: hidden;
+
       img {
         width: 100%;
         height: 100%;
@@ -29,7 +32,8 @@
     .name {
       h4 {
         font-weight: 600;
-        color: #fff;
+        // color: #fff;
+        color: var(--text-black);
         margin-bottom: 8px;
       }
     }
@@ -39,6 +43,7 @@
     display: flex;
     flex-direction: column;
     margin: 10px 0px;
+
     .custom-chat,
     .privacy,
     .media {
@@ -46,8 +51,14 @@
       flex-direction: row;
       justify-content: space-between;
       margin: 4px 0px;
-      color: #fff;
+      // color: #fff;
+      color: var(--text-black);
       cursor: pointer;
+
+      h4 {
+        font-size: 14px;
+      }
+
       label {
         cursor: pointer;
       }
@@ -60,9 +71,11 @@
     grid-gap: 5px;
     display: none;
     overflow-y: auto;
+
     &::-webkit-scrollbar {
       display: none;
     }
+
     img {
       width: 100%;
       height: 100%;
@@ -73,7 +86,7 @@
     display: none;
   }
 
-  #gallery:checked ~ .gallery {
+  #gallery:checked~.gallery {
     display: grid;
   }
 }

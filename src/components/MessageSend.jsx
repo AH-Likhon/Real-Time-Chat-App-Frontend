@@ -51,7 +51,7 @@ const MessageSend = (props) => {
             <div className="emoji-section">
                 <div className="emoji">
                     {
-                        emojis.map(emoji => <span onClick={() => emojiSend(emoji)}>{emoji}</span>)
+                        emojis.map((emoji, index) => <span key={index} onClick={() => emojiSend(emoji)}>{emoji}</span>)
                     }
                 </div>
             </div>

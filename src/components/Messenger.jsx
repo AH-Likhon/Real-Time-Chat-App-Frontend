@@ -76,6 +76,12 @@ const Messenger = () => {
     const socket = useRef();
 
 
+    useEffect(() => {
+        dispatch(getFriends());
+        // dispatch(getMessage(currentFrnd._id, myInfo.id));
+    }, []);
+
+
     // useEffect(() => {
     //     fetch('http://localhost:5000/get-message')
     //         .then(res => res.json())
@@ -392,12 +398,6 @@ const Messenger = () => {
         })
     }
 
-
-    useEffect(() => {
-        dispatch(getFriends());
-        // dispatch(getMessage(currentFrnd._id, myInfo.id));
-    }, []);
-
     useEffect(() => {
         if (friends && friends.length > 0) {
             setCurrentFrnd(myFriends[0]);
@@ -435,7 +435,23 @@ const Messenger = () => {
 
     useEffect(() => {
         dispatch(getTheme())
-    }, [])
+    }, []);
+
+    const searchFrnd = e => {
+        // console.log(e.target.value);
+
+        const getFrndsClass = document.getElementsByClassName('hover-friend');
+        const frndName = document.getElementsByClassName('search_frnd_name');
+
+        for (let i = 0; i < getFrndsClass.length, i < frndName.length; i++) {
+            let text = frndName[i].innerText.toLowerCase();
+            if (text.indexOf(e.target.value.toLowerCase()) > -1) {
+                getFrndsClass[i].style.display = '';
+            } else {
+                getFrndsClass[i].style.display = 'none'
+            }
+        }
+    }
 
     return (
         <div className={themeMode === 'dark' ? 'messenger theme' : 'messenger'}>
@@ -492,7 +508,7 @@ const Messenger = () => {
                         <div className="friend-search">
                             <div className="search">
                                 <button> <BiSearch /> </button>
-                                <input type="text" placeholder='Search' className="form-control" />
+                                <input onChange={searchFrnd} type="text" placeholder='Search' className="form-control" />
                             </div>
                         </div>
 
@@ -508,7 +524,7 @@ const Messenger = () => {
                         <div className="friends">
                             {/* active */}
                             {
-                                myFriends && myFriends.length > 0 ? myFriends.map((friend, index) => <div onClick={() => setCurrentFrnd(friend)} className={currentFrnd._id === friend._id ? "hover-friend active" : "hover-friend"}>
+                                myFriends && myFriends.length > 0 ? myFriends.map((friend, index) => <div key={index} onClick={() => setCurrentFrnd(friend)} className={currentFrnd._id === friend._id ? "hover-friend active" : "hover-friend"}>
                                     <Friends key={friend._id} activeUser={activeUser} sms={message} myId={myInfo.id} friend={friend} />
                                 </div>) : 'No friends are available now.'
                             }

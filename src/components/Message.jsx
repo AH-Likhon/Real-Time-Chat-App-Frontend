@@ -18,13 +18,11 @@ const Message = ({ message, currentFrnd, scrollRef, typing }) => {
                 {
                     message && message.length > 0 ? message.map((m, index) =>
                         m.senderId === myInfo.id ?
-                            <div ref={scrollRef} className="my-message">
+                            <div key={index} ref={scrollRef} className="my-message">
                                 <div className="image-message">
                                     <div className="my-text">
                                         <p className="message-text mine">
-                                            {/* {
-                                                m.message.image === '' ? m.message.text : <img src={m.message.image}></img>
-                                            } */}
+
                                             {m.message.text === '' ? <img src={m.message.image} alt='image' /> : m.message.text}
 
                                             {
@@ -35,10 +33,6 @@ const Message = ({ message, currentFrnd, scrollRef, typing }) => {
                                                 </span> : ''
                                             }
                                         </p>
-
-                                        {/* {
-                                            m.message.image && m.message.image === '' ? <p className='message-text'>{m.message.text}</p> : <img src={m.message.image} alt="image" />
-                                        } */}
                                     </div>
                                 </div>
 
@@ -47,13 +41,12 @@ const Message = ({ message, currentFrnd, scrollRef, typing }) => {
                                 </div>
                             </div>
                             :
-                            <div ref={scrollRef} className="frnd-message">
+                            <div key={index} ref={scrollRef} className="frnd-message">
                                 <div className="image-message-time">
                                     <img src={currentFrnd.image} alt="" />
 
                                     <div className="message-time">
                                         <div className="frnd-text">
-                                            {/* <p className="message-text">{m.message.text}</p> */}
                                             <p className='message-text frnd'>
                                                 {m.message.text === '' ? <img src={m.message?.image} alt='image' /> : m.message.text}
                                             </p>

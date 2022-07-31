@@ -84,7 +84,9 @@
       border-top-left-radius: 50px;
       background-color: transparent;
       border: none;
-      &::placeholder{
+      color: var(--text-black);
+
+      &::placeholder {
         color: var(--text-white);
       }
     }

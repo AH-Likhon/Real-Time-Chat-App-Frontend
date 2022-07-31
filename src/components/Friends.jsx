@@ -45,7 +45,7 @@ const Friends = ({ friend, sms, myId, activeUser }) => {
 
             <div className='friend-name-seen'>
                 <div className="friend-name">
-                    <h4 className={lsms?.senderId !== myId && lsms?.status !== undefined && lsms?.status !== 'seen' ? 'unseen_sms' : ''}>{friend?.userName}</h4>
+                    <h4 className={lsms?.senderId !== myId && lsms?.status !== undefined && lsms?.status !== 'seen search_frnd_name' ? 'unseen_sms search_frnd_name' : 'search_frnd_name'}>{friend?.userName}</h4>
                     <div className='sms-time'>
                         {
                             lsms && lsms.senderId === myId ? <span>You: sent</span> : lsms !== undefined ? <span className={lsms?.senderId !== myId && lsms?.status !== undefined && lsms?.status !== 'seen' ? 'unseen_sms' : ''}>{lsms?.senderName.slice(0, 5)}: sent</span> : ""

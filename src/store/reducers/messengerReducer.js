@@ -4,7 +4,8 @@ import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, GET_THEME, MESSAGE_GET_SUCCESS, MES
 const messengerState = {
     friends: [],
     message: [],
-    themeMode: ''
+    themeMode: '',
+    add_new_user: ''
     // allMessage: []
     // smsSendSuccess: false
 }
@@ -111,6 +112,20 @@ export const messengerReducer = (state = messengerState, action) => {
             ...state,
             friends: [],
             message: [],
+        }
+    };
+
+    if (type === 'ADD_NEW_USER') {
+        return {
+            ...state,
+            add_new_user: payload.add_new_user
+        }
+    };
+
+    if (type === 'ADD_NEW_USER_CLEAR') {
+        return {
+            ...state,
+            add_new_user: ''
         }
     }
 

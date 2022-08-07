@@ -94,7 +94,7 @@ export const userRegister = (data) => {
 
             if (response.data.successMessage) {
                 localStorage.setItem('authToken', response.data.token);
-                await axios.post('http://localhost:5000/login', data, config);
+                // await axios.post('http://localhost:5000/login', data, config);
 
                 dispatch({
                     type: REGISTER_SUCCESS,
@@ -216,13 +216,18 @@ export const userLogOut = (data) => async (dispatch) => {
         const res = await axios.delete(`http://localhost:5000/logout/${data.id}`);
 
         console.log(res.data);
+        localStorage.removeItem('authToken');
+        dispatch({
+            type: LOGOUT_SUCCESS
+        })
 
-        if (res.data.successMessage) {
-            localStorage.removeItem('authToken');
-            dispatch({
-                type: LOGOUT_SUCCESS
-            })
-        }
+        // if (res.data.successMessage) {
+        //     localStorage.removeItem('authToken');
+        //     localStorage.removeItem('authToken');
+        //     dispatch({
+        //         type: LOGOUT_SUCCESS
+        //     })
+        // }
     } catch (error) {
 
     }

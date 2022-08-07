@@ -20,7 +20,7 @@ const Messenger = () => {
     const [notificationSPlay] = useSound(notification);
     const [sendingSPlay] = useSound(sending);
 
-    const { friends, message, themeMode } = useSelector(state => state.messenger);
+    const { friends, message, themeMode, add_new_user } = useSelector(state => state.messenger);
     const { myInfo } = useSelector(state => state.auth);
     // const [lastSMSList, setLastSMSList] = useState([]);
     const [darkMode, setDarkMode] = useState(true);
@@ -74,12 +74,6 @@ const Messenger = () => {
 
     const scrollRef = useRef();
     const socket = useRef();
-
-
-    useEffect(() => {
-        dispatch(getFriends());
-        // dispatch(getMessage(currentFrnd._id, myInfo.id));
-    }, []);
 
 
     // useEffect(() => {
@@ -169,6 +163,16 @@ const Messenger = () => {
             const filterUsers = users.filter(user => user.userId !== myInfo.id);
             console.log(filterUsers);
             setActiveUser(filterUsers);
+        });
+
+        socket.current.on('add_new_user', data => {
+            dispatch({
+                type: 'ADD_NEW_USER',
+                payload: {
+                    add_new_user: data
+                }
+            });
+            dispatch(getFriends());
         })
     }, []);
 
@@ -396,7 +400,15 @@ const Messenger = () => {
             receiverId: currentFrnd._id,
             message: emoji
         })
-    }
+    };
+
+    useEffect(() => {
+        dispatch(getFriends());
+        // dispatch(getMessage(currentFrnd._id, myInfo.id));
+        dispatch({
+            type: 'ADD_NEW_USER_CLEAR'
+        })
+    }, [add_new_user]);
 
     useEffect(() => {
         if (friends && friends.length > 0) {

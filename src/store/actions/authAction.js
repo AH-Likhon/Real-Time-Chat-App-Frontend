@@ -23,7 +23,7 @@ export const userRegister = (data) => {
 
         // let authToken = new Array();
 
-        // fetch('http://localhost:5000/users', {
+        // fetch('https://fierce-bastion-47070.herokuapp.com/users', {
         //     method: 'POST',
         //     headers: { "content-type": "application/json" },
         //     body: JSON.stringify(data),
@@ -77,9 +77,9 @@ export const userRegister = (data) => {
             }
         }
         try {
-            const response = await axios.post('http://localhost:5000/users', data, config);
+            const response = await axios.post('https://fierce-bastion-47070.herokuapp.com/users', data, config);
 
-            // await axios.post('http://localhost:5000/login', data, config);
+            // await axios.post('https://fierce-bastion-47070.herokuapp.com/login', data, config);
 
             console.log(response.data);
 
@@ -94,7 +94,7 @@ export const userRegister = (data) => {
 
             if (response.data.successMessage) {
                 localStorage.setItem('authToken', response.data.token);
-                // await axios.post('http://localhost:5000/login', data, config);
+                // await axios.post('https://fierce-bastion-47070.herokuapp.com/login', data, config);
 
                 dispatch({
                     type: REGISTER_SUCCESS,
@@ -132,7 +132,7 @@ export const userLogin = (data) => {
         // console.log(data);
 
         try {
-            const response = await axios.post('http://localhost:5000/login', data, config);
+            const response = await axios.post('https://fierce-bastion-47070.herokuapp.com/login', data, config);
 
             // response.set("Access-Control-Allow-Origin", "*");
             console.log(response.data);
@@ -213,7 +213,7 @@ export const userLogOut = (data) => async (dispatch) => {
 
     try {
 
-        const res = await axios.delete(`http://localhost:5000/logout/${data.id}`);
+        const res = await axios.delete(`https://fierce-bastion-47070.herokuapp.com/logout/${data.id}`);
 
         console.log(res.data);
         localStorage.removeItem('authToken');

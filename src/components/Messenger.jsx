@@ -77,7 +77,7 @@ const Messenger = () => {
 
 
     // useEffect(() => {
-    //     fetch('http://localhost:5000/get-message')
+    //     fetch('https://fierce-bastion-47070.herokuapp.com/get-message')
     //         .then(res => res.json())
     //         .then(data => {
     //             // setSocketMessage(data.getAllMessage);
@@ -102,7 +102,7 @@ const Messenger = () => {
     // console.log(socket);
 
     useEffect(() => {
-        socket.current = io('ws://localhost:8000');
+        socket.current = io('https://fierce-bastion-47070.herokuapp.com');
         socket.current.on('getMessage', data => {
             setSocketMessage(data);
             // setSocketSeen(data);
@@ -384,7 +384,7 @@ const Messenger = () => {
     }
 
     // useEffect(() => {
-    //     fetch("http://localhost:5000/get-message")
+    //     fetch("https://fierce-bastion-47070.herokuapp.com/get-message")
     //         .then(res => res.json())
     //         .then(data => setLastSMSList(data.getAllMessage));
     // }, []);

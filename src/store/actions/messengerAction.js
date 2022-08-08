@@ -3,7 +3,7 @@ import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, GET_THEME, MESSAGE_GET_SUCCESS, MES
 
 export const getFriends = () => async (dispatch) => {
     try {
-        const response = await axios.get("http://localhost:5000/get-friends");
+        const response = await axios.get("https://fierce-bastion-47070.herokuapp.com/get-friends");
         // console.log(response.data.friends);
         dispatch({
             type: FRIENDS_GET_SUCCESS,
@@ -26,7 +26,7 @@ export const messageSend = data => async (dispatch) => {
     }
 
     try {
-        const response = await axios.post("http://localhost:5000/send-message", data, config);
+        const response = await axios.post("https://fierce-bastion-47070.herokuapp.com/send-message", data, config);
         console.log(response.data);
         dispatch({
             type: MESSAGE_SEND_SUCCESS,
@@ -44,7 +44,7 @@ export const getMessage = (frndId, myId) => {
     return async dispatch => {
         // console.log(id);
         try {
-            const response = await axios.get("http://localhost:5000/get-message");
+            const response = await axios.get("https://fierce-bastion-47070.herokuapp.com/get-message");
             // console.log(response.data.getAllMessage);
 
             // const getAllMessage = await response.data.getAllMessage.filter(m =>
@@ -105,7 +105,7 @@ export const imgMessageSend = (data) => async (dispatch) => {
     }
 
     try {
-        const response = await axios.post('http://localhost:5000/image-message', data, config);
+        const response = await axios.post('https://fierce-bastion-47070.herokuapp.com/image-message', data, config);
         dispatch({
             type: MESSAGE_SEND_SUCCESS,
             payload: {
@@ -122,9 +122,9 @@ export const seenSMS = (sms) => async (dispatch) => {
     // console.log(sms);
     try {
         // let lsms = { ...sms, status: 'seen' }
-        await axios.put('http://localhost:5000/seen-sms', sms);
+        await axios.put('https://fierce-bastion-47070.herokuapp.com/seen-sms', sms);
         // console.log(res);
-        await axios.get("http://localhost:5000/get-message");
+        await axios.get("https://fierce-bastion-47070.herokuapp.com/get-message");
         // const value = response.data.getAllMessage.slice(-1)[0].status
         // console.log(response.data.getAllMessage.slice(-1)[0]);
         // const newArr = response.data.getAllMessage.map(object => {
@@ -154,9 +154,9 @@ export const deliveredSMS = (sms) => async (dispatch) => {
     // console.log(sms);
     try {
         // let lsms = { ...sms, status: 'delivered' }
-        await axios.put('http://localhost:5000/seen-sms', sms);
+        await axios.put('https://fierce-bastion-47070.herokuapp.com/seen-sms', sms);
         // console.log(res);
-        await axios.get("http://localhost:5000/get-message");
+        await axios.get("https://fierce-bastion-47070.herokuapp.com/get-message");
 
         dispatch({
             type: DELIVERED_SMS,
@@ -173,9 +173,9 @@ export const updateSeenSMSRes = (sms) => async (dispatch) => {
     // console.log(sms);
     try {
         // let lsms = { ...sms, status: 'delivered' }
-        await axios.put('http://localhost:5000/seen-sms', sms);
+        await axios.put('https://fierce-bastion-47070.herokuapp.com/seen-sms', sms);
         // console.log(res);
-        await axios.get("http://localhost:5000/get-message");
+        await axios.get("https://fierce-bastion-47070.herokuapp.com/get-message");
 
         dispatch({
             type: UPDATE,

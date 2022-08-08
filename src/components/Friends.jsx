@@ -16,7 +16,7 @@ const Friends = ({ friend, sms, myId, activeUser }) => {
 
     // useEffect(() => {
     //     setTimeout(() => {
-    //         fetch("http://localhost:5000/get-message")
+    //         fetch("https://fierce-bastion-47070.herokuapp.com/get-message")
     //             .then(res => res.json())
     //             .then(data => setAllMessage(data.getAllMessage));
     //     }, 1000)

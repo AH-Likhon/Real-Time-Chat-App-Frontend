@@ -12,7 +12,7 @@ export const getFriends = () => async (dispatch) => {
             }
         })
     } catch (error) {
-        console.log(error.response.data);
+        // console.log(error.response.data);
     }
 }
 
@@ -100,6 +100,7 @@ export const imgMessageSend = (data) => async (dispatch) => {
 
     const config = {
         headers: {
+            // 'content-type': 'multipart/form-data'
             'content-type': 'application/json'
         }
     }

@@ -25,7 +25,7 @@ const Messenger = () => {
     // const [lastSMSList, setLastSMSList] = useState([]);
     const [darkMode, setDarkMode] = useState(true);
 
-    console.log('Check theme', themeMode);
+    // console.log('Check theme', themeMode);
 
     const myFriends = friends?.filter(friend => friend.email !== myInfo.email);
 
@@ -66,7 +66,7 @@ const Messenger = () => {
     const dispatch = useDispatch();
 
     const [newMessage, setNewMessage] = useState('');
-    // const [sendImage, setSendImage] = useState('');
+    const [sendImage, setSendImage] = useState('');
     const [activeUser, setActiveUser] = useState([]);
     const [socketMessage, setSocketMessage] = useState("");
     const [socketSeen, setSocketSeen] = useState("");
@@ -161,7 +161,7 @@ const Messenger = () => {
     useEffect(() => {
         socket.current.on('getUser', users => {
             const filterUsers = users.filter(user => user.userId !== myInfo.id);
-            console.log(filterUsers);
+            // console.log(filterUsers);
             setActiveUser(filterUsers);
         });
 
@@ -214,7 +214,7 @@ const Messenger = () => {
 
     const handleInput = e => {
         setNewMessage(e.target.value);
-        // setSendImage('');
+        setSendImage('');
 
         socket.current.emit('typing', {
             senderId: myInfo.id,
@@ -231,21 +231,42 @@ const Messenger = () => {
             // const newImageName = Date.now() + imageName;
             // console.log(newImageName);
             // setSendImage(imageName);
-            // setNewMessage('');
+            setNewMessage('');
 
-            // const reader = new FileReader();
+            const reader = new FileReader();
 
             // let loadImg;
 
-            // reader.onload = () => {
-            //     setSendImage(reader.result);
-            //     console.log(sendImage);
-            // }
+            reader.onload = () => {
+                // if (reader.result) {
+                setSendImage(reader.result);
+                console.log(sendImage);
+                // }
+            }
+            reader.readAsDataURL(e.target.files[0]);
 
-            // console.log(sendImage);
+            console.log(sendImage);
+            // setSendImage(e.target.files[0]);
 
-            const url = URL.createObjectURL(e.target.files[0]);
-            console.log(url);
+            // const getBase64FromUrl = async (url) => {
+            //     const data = await fetch(url);
+            //     const blob = await data.blob();
+            //     const reader = new FileReader();
+            //     reader.readAsDataURL(blob);
+
+            //     return new Promise((resolve) => {
+            //         reader.onloadend = () => {
+            //             const base64data = reader.result;
+            //             resolve(base64data)
+            //         };
+            //     });
+            // };
+
+            // const url = URL.createObjectURL(e.target.files[0]);
+            // console.log(url);
+            // // blobToDataURL()
+            // console.log(getBase64FromUrl(url).then(result => result));
+
 
             // socket.current.emit('sendMessage', {
             //     senderId: myInfo.id,
@@ -260,13 +281,28 @@ const Messenger = () => {
 
 
             // reader.readAsDataURL(e.target.files[0]);
+            // let loadImg;
+            // const reader = new FileReader();
+
+            // reader.onloadend = () => {
+            //     console.log(reader.result);//base64encoded string
+            //     setSendImage(reader.result);
+            // };
+            // reader.readAsDataURL(e.target.files[0]);
+            // reader.onerror = (error) => {
+            //     console.log('Error: ', error);
+            // };
+
+            // console.log('LoadImage', loadImg);
+
 
             const formData = new FormData();
             formData.append('senderId', myInfo.id);
             formData.append('senderName', myInfo.userName);
             formData.append('receiverId', currentFrnd._id);
             formData.append('receiverName', currentFrnd.userName);
-            formData.append('image', url);
+            formData.append('image', sendImage);
+            // formData.append('image', url);
             // formData.append('imageName', newImageName);
 
             var newData = {};
@@ -294,6 +330,7 @@ const Messenger = () => {
 
             // console.log('status', status)
 
+            // if (sendImage.length > 0) {
             const data = {
                 uid,
                 senderId: newData.senderId,
@@ -319,8 +356,10 @@ const Messenger = () => {
             })
 
             dispatch(imgMessageSend(data));
-
+            setSendImage('');
             console.log(data);
+            // }
+
         }
     }
 
@@ -393,7 +432,7 @@ const Messenger = () => {
 
     const emojiSend = emoji => {
         setNewMessage(`${newMessage}` + emoji);
-        // setSendImage('');
+        setSendImage('');
 
         socket.current.emit('typing', {
             senderId: myInfo.id,

@@ -28,7 +28,7 @@ const MessageSend = (props) => {
                 <div className="add-image">
                     Add Image
                 </div>
-                <input onChange={imageSend} type="file" id="pic" className="form-control" />
+                <input onChange={imageSend} accept="image/*" type="file" id="pic" className="form-control" />
                 <label htmlFor="pic"><RiGalleryLine /></label>
             </div>
             <div className="file">

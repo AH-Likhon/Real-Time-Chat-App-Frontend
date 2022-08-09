@@ -4,7 +4,7 @@ import { BsChevronDown } from 'react-icons/bs';
 
 const FriendInfo = (props) => {
     const { currentFrnd, activeUser, message } = props;
-    console.log(message);
+    // console.log(message);
 
     return (
         <div className="friend-info">

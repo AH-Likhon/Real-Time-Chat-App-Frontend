@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin, userRegister } from "../store/actions/authAction";
+import { userRegister } from "../store/actions/authAction";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import { SUCCESS_MESSAGE_CLEAR, ERROR_CLEAR } from '../store/types/authType';
@@ -13,7 +13,7 @@ const Register = () => {
     // console.log(history);
 
     const alert = useAlert();
-    const { loading, successMessage, error, authenticate, myInfo } = useSelector(state => state.auth);
+    const { successMessage, error, authenticate } = useSelector(state => state.auth);
 
     // console.log(myInfo);
 

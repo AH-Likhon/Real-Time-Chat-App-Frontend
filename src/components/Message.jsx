@@ -23,7 +23,7 @@ const Message = ({ message, currentFrnd, scrollRef, typing }) => {
                                     <div className="my-text">
                                         <p className="message-text mine">
 
-                                            {m.message.text === '' ? <img src={m.message.image} alt='image' /> : m.message.text}
+                                            {m.message.text === '' ? <img src={m.message?.image} alt='image' /> : m.message.text}
 
                                             {
                                                 index === (message.length - 1) && m.senderId === myInfo.id ? m.status === 'seen' ? <img className='img' src={currentFrnd.image} alt="" /> : m.status === 'delivered' ? <span className='delivered'>

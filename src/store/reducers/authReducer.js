@@ -11,7 +11,7 @@ const authState = {
 
 const tokenDecode = (token) => {
     const tokenDecoded = deCodeToken(token);
-    console.log(tokenDecoded);
+    // console.log(tokenDecoded);
     const expTime = new Date(tokenDecoded.exp * 1000);
     if (new Date() > expTime) {
         return null;

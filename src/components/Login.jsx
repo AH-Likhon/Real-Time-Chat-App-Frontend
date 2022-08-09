@@ -11,24 +11,24 @@ const Login = () => {
     const history = useNavigate();
 
     // console.log(history);
-    
+
     const alert = useAlert();
-    const { loading, successMessage, error, authenticate, myInfo } = useSelector(state => state.auth);
+    const { successMessage, error, authenticate } = useSelector(state => state.auth);
 
     const [click, setClick] = useState(true);
-    
+
     const dispatch = useDispatch();
 
-    const [ state, setState ] = useState({ email: '', password: ''});
+    const [state, setState] = useState({ email: '', password: '' });
 
     const handleChange = e => {
-        setState({ ...state, [e.target.name]: e.target.value})
+        setState({ ...state, [e.target.name]: e.target.value })
     }
 
     const login = e => {
         e.preventDefault();
 
-        console.log(state);
+        // console.log(state);
 
         dispatch(userLogin(state));
 
@@ -37,20 +37,20 @@ const Login = () => {
 
     useEffect(() => {
 
-        if(authenticate){
+        if (authenticate) {
             history('/messenger');
         }
 
-        if(!click && successMessage){
+        if (!click && successMessage) {
             alert.success(successMessage);
-            dispatch({ type : SUCCESS_MESSAGE_CLEAR })
+            dispatch({ type: SUCCESS_MESSAGE_CLEAR })
             // alert.remove(successMessage);
             // alert.removeAll()
         }
 
-        if(!click && error){
+        if (!click && error) {
             alert.error(error);
-            dispatch({ type : ERROR_CLEAR })
+            dispatch({ type: ERROR_CLEAR })
             // alert.remove(error);
             // alert.removeAll()
         }
@@ -68,11 +68,11 @@ const Login = () => {
                     <form onSubmit={login}>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
-                            <input onChange={handleChange} value={state.email} type="email" name='email' placeholder='Email' id='email' className='form-control'/>
+                            <input onChange={handleChange} value={state.email} type="email" name='email' placeholder='Email' id='email' className='form-control' />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input onChange={handleChange} value={state.password} type="password" name='password' placeholder='Password' id='password' className='form-control'/>
+                            <input onChange={handleChange} value={state.password} type="password" name='password' placeholder='Password' id='password' className='form-control' />
                         </div>
                         <div className="form-group">
                             <input type="submit" value="Login" className="btn" />

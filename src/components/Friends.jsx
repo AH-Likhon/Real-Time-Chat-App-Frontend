@@ -8,7 +8,7 @@ const Friends = ({ friend, sms, myId, activeUser }) => {
 
     let lsms = sms.filter((m => (m.senderId === myId && m.receiverId === friend._id) || (m.senderId === friend._id && m.receiverId === myId))).slice(-1)[0];
 
-    console.log(activeUser);
+    // console.log(activeUser);
 
     // const [allMessage, setAllMessage] = useState([])
 

@@ -1,6 +1,9 @@
 import axios from "axios"
 import { DELIVERED_SMS, FRIENDS_GET_SUCCESS, GET_THEME, MESSAGE_GET_SUCCESS, MESSAGE_SEND_SUCCESS, SEEN_SMS, SET_THEME, UPDATE } from "../types/messengerTypes";
 
+
+// <-------------------------- Get All Friends Action --------------------------> // 
+
 export const getFriends = () => async (dispatch) => {
     try {
         const response = await axios.get("https://fierce-bastion-47070.herokuapp.com/get-friends");
@@ -16,6 +19,7 @@ export const getFriends = () => async (dispatch) => {
     }
 }
 
+// <------------------------- Message Inser/Send Action -------------------------> //
 
 export const messageSend = data => async (dispatch) => {
     // console.log(data);
@@ -27,7 +31,7 @@ export const messageSend = data => async (dispatch) => {
 
     try {
         const response = await axios.post("https://fierce-bastion-47070.herokuapp.com/send-message", data, config);
-        console.log(response.data);
+        // console.log(response.data);
         dispatch({
             type: MESSAGE_SEND_SUCCESS,
             payload: {
@@ -35,10 +39,13 @@ export const messageSend = data => async (dispatch) => {
             }
         })
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         // console.log(error.response?.data)
     }
 }
+
+
+// <-------------------------- Get All Message Action --------------------------> //
 
 export const getMessage = (frndId, myId) => {
     return async dispatch => {
@@ -47,54 +54,24 @@ export const getMessage = (frndId, myId) => {
             const response = await axios.get("https://fierce-bastion-47070.herokuapp.com/get-message");
             // console.log(response.data.getAllMessage);
 
-            // const getAllMessage = await response.data.getAllMessage.filter(m =>
-            //     `$or: [
-            //     {
-            //         $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
-            //     },
-            //     {
-            //         $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
-            //     }
-            // ]`
-            // );
-
-            // const getLastMSG = await response.data.getAllMessage.filter(m =>
-            //     `$or: [
-            //     {
-            //         $and: [{ senderId: { $eq: m.myId } }, { receiverId: { $eq: m.frndId } }]
-            //     },
-            //     {
-            //         $and: [{ senderId: { $eq: m.frndId } }, { receiverId: { $eq: m.myId } }]
-            //     }
-            // ].sort({ updatedAt: -1 })`
-            // );
-
-            const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId));
-
-
-            // const getLastMSG = response.data.getAllMessage.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId))).slice(-1);
-            // const getLastMSG = response.data.getAllMessage.findOne((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId))).sort({ updatedAt: -1 });
-
-            // console.log("last SMS", getLastMSG);
+            // const getAllMessage = response.data.getAllMessage.filter(m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId));
 
             // console.log(getAllMessage);
 
             dispatch({
                 type: MESSAGE_GET_SUCCESS,
                 payload: {
-                    // message: getAllMessage,
                     message: response.data.getAllMessage,
-                    // allMessage: response.data.getAllMessage
-                    // lastSMS: getLastMSG
                 }
             });
 
         } catch (error) {
-            console.log(error.response.data);
+            // console.log(error.response.data);
         }
     }
 }
 
+// <------------------------ Image SMS Send/Insert Action -----------------------> //
 
 export const imgMessageSend = (data) => async (dispatch) => {
 
@@ -114,10 +91,12 @@ export const imgMessageSend = (data) => async (dispatch) => {
             }
         })
     } catch (error) {
-        console.log(error.response.data)
+        // console.log(error.response.data)
     }
 
 }
+
+// <------------------------------ Seen SMS Action ------------------------------> //
 
 export const seenSMS = (sms) => async (dispatch) => {
     // console.log(sms);
@@ -126,30 +105,19 @@ export const seenSMS = (sms) => async (dispatch) => {
         await axios.put('https://fierce-bastion-47070.herokuapp.com/seen-sms', sms);
         // console.log(res);
         await axios.get("https://fierce-bastion-47070.herokuapp.com/get-message");
-        // const value = response.data.getAllMessage.slice(-1)[0].status
-        // console.log(response.data.getAllMessage.slice(-1)[0]);
-        // const newArr = response.data.getAllMessage.map(object => {
-        //     if (object.uid === sms.uid) {
-        //         // 👇️ change value of name property
-        //         return { ...object, status: 'seen' };
-        //     }
-        //     return object;
-        // });
-        // console.log();
+
         dispatch({
             type: SEEN_SMS,
             payload: {
                 sms: sms,
             }
         });
-
-
-        // console.log(response.data.getAllMessage.slice(-1)[0].status === 'seen');
-        // console.log(response.data.getAllMessage.includes(sms));
     } catch (error) {
-        console.log(error)
+        // console.log(error)
     }
 }
+
+// <--------------------------- Delivered SMS Action ----------------------------> //
 
 export const deliveredSMS = (sms) => async (dispatch) => {
     // console.log(sms);
@@ -166,9 +134,12 @@ export const deliveredSMS = (sms) => async (dispatch) => {
             }
         });
     } catch (error) {
-        console.log(error)
+        // console.log(error)
     }
 };
+
+
+// <--------------------- Update Unseen to Seen SMS Action ----------------------> //
 
 export const updateSeenSMSRes = (sms) => async (dispatch) => {
     // console.log(sms);
@@ -185,10 +156,11 @@ export const updateSeenSMSRes = (sms) => async (dispatch) => {
             }
         });
     } catch (error) {
-        console.log(error)
+        // console.log(error)
     }
 }
 
+// <----------------------- Theme Dark/White Initial Action ---------------------> //
 
 export const getTheme = () => async dispatch => {
     const theme = localStorage.getItem('theme');
@@ -200,6 +172,8 @@ export const getTheme = () => async dispatch => {
         }
     })
 }
+
+// <------------------------------ Theme Change Action --------------------------> //
 
 export const themeSet = themeVal => async dispatch => {
     localStorage.setItem('theme', themeVal);

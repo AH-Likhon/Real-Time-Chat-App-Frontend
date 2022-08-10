@@ -6,7 +6,7 @@ import sending from '../audio/sending.mp3';
 import { FaEdit } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
-import ActiveFriend from './ActiveFriend';
+// import ActiveFriend from './ActiveFriend';
 import Friends from './Friends';
 import RightSide from './RightSide';
 import { io } from 'socket.io-client';
@@ -30,7 +30,6 @@ const Messenger = () => {
     const myFriends = friends?.filter(friend => friend.email !== myInfo.email);
 
     const [currentFrnd, setCurrentFrnd] = useState('');
-    // const [allMessage, setAllMessage] = useState('');
     // console.log(currentFrnd);
 
     // console.log('Last SMS:', message);
@@ -39,29 +38,6 @@ const Messenger = () => {
     // let lastSMS = message.slice(-1);
 
     let smsMessage = message?.filter((m => (m.senderId === myInfo.id && m.receiverId === currentFrnd._id) || (m.senderId === currentFrnd._id && m.receiverId === myInfo.id)));
-
-    // if (friends && message) {
-    //     const getLastSMS = (myId, frndId) => {
-    //         let sms = message.filter((m => (m.senderId === myId && m.receiverId === frndId) || (m.senderId === frndId && m.receiverId === myId))).reverse()[0];
-
-    //         return sms;
-    //     }
-
-
-    //     let frnd_sms = [];
-
-    //     for (let i = 0; i < myFriends.length; i++) {
-    //         let lsms = getLastSMS(myInfo.id, myFriends[i]._id);
-    //         // console.log(lsms);
-    //         if (lsms !== undefined) {
-    //             frnd_sms = [...frnd_sms, lsms];
-    //         }
-    //         console.log(lsms);
-    //     }
-
-    //     console.log(frnd_sms);
-    // }
-
 
     const dispatch = useDispatch();
 
@@ -75,70 +51,23 @@ const Messenger = () => {
     const scrollRef = useRef();
     const socket = useRef();
 
-
-    // useEffect(() => {
-    //     fetch('https://fierce-bastion-47070.herokuapp.com/get-message')
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             // setSocketMessage(data.getAllMessage);
-    //             const getAllMessage = data.getAllMessage;
-    //             // console.log(getAllMessage);
-    //             setLastSMSList([...lastSMSList, getAllMessage]);
-    //             // for (const singleFrnd of myFriends) {
-    //             //     console.log(getAllMessage.filter((m => (m.senderId === myInfo.id && m.receiverId === singleFrnd._id) || (m.senderId === singleFrnd._id && m.receiverId === myInfo.id))));
-
-    //             //     const lastSMS = getAllMessage.filter((m => (m.senderId === myInfo.id && m.receiverId === singleFrnd._id) || (m.senderId === singleFrnd._id && m.receiverId === myInfo.id))).reverse()[0];
-
-    //             //     // console.log(lastSMS);
-    //             //     // lastSMSList.push(lastSMS);
-
-    //             //     
-    //             // }
-    //         })
-    // }, []);
-
-    // console.log(socketMessage);
-
-    // console.log(socket);
+    // <-------------------------- Socket Connection --------------------------> //
 
     useEffect(() => {
         socket.current = io('https://fierce-bastion-47070.herokuapp.com');
         socket.current.on('getMessage', data => {
             setSocketMessage(data);
-            // setSocketSeen(data);
-            // setSocketAllMessage([...socketAllMessage, data]);
-            // console.log(socketAllMessage);
         })
         socket.current.on('seenSmsRes', data => {
             dispatch(seenSMS(data));
-            // dispatch({
-            //     type: 'SEEN_SMS',
-            //     payload: {
-            //         sms: data,
-            //     }
         })
-        // setSocketMessage(data);
-        // dispatch(seenSMS(data));
-        // });
 
         socket.current.on('deliveredSmsRes', data => {
             dispatch(deliveredSMS(data));
-            // dispatch({
-            //     type: 'DELIVERED_SMS',
-            //     payload: {
-            //         sms: data,
-            //     }
-            // })
         });
 
         socket.current.on('updateSeenSMSRes', data => {
             dispatch(updateSeenSMSRes(data));
-            // dispatch({
-            //     type: 'DELIVERED_SMS',
-            //     payload: {
-            //         sms: data,
-            //     }
-            // })
         });
 
         socket.current.on('getTyping', (data) => {
@@ -212,6 +141,8 @@ const Messenger = () => {
     }, [socketMessage])
 
 
+    // <----------------------- Handle Input For SMS Send -----------------------> //
+
     const handleInput = e => {
         setNewMessage(e.target.value);
         setSendImage('');
@@ -222,6 +153,8 @@ const Messenger = () => {
             message: e.target.value
         })
     }
+
+    // <-------------------------- Image Send SMS --------------------------> //
 
     const imageSend = e => {
         if (e.target.files.length !== 0) {
@@ -246,55 +179,9 @@ const Messenger = () => {
             reader.readAsDataURL(e.target.files[0]);
 
             console.log(sendImage);
-            // setSendImage(e.target.files[0]);
-
-            // const getBase64FromUrl = async (url) => {
-            //     const data = await fetch(url);
-            //     const blob = await data.blob();
-            //     const reader = new FileReader();
-            //     reader.readAsDataURL(blob);
-
-            //     return new Promise((resolve) => {
-            //         reader.onloadend = () => {
-            //             const base64data = reader.result;
-            //             resolve(base64data)
-            //         };
-            //     });
-            // };
 
             // const url = URL.createObjectURL(e.target.files[0]);
             // console.log(url);
-            // // blobToDataURL()
-            // console.log(getBase64FromUrl(url).then(result => result));
-
-
-            // socket.current.emit('sendMessage', {
-            //     senderId: myInfo.id,
-            //     senderName: myInfo.userName,
-            //     receiverId: currentFrnd._id,
-            //     receiverName: currentFrnd.userName,
-            //     message: '',
-            //     // image: newImageName,
-            //     image: url,
-            //     time: new Date()
-            // });
-
-
-            // reader.readAsDataURL(e.target.files[0]);
-            // let loadImg;
-            // const reader = new FileReader();
-
-            // reader.onloadend = () => {
-            //     console.log(reader.result);//base64encoded string
-            //     setSendImage(reader.result);
-            // };
-            // reader.readAsDataURL(e.target.files[0]);
-            // reader.onerror = (error) => {
-            //     console.log('Error: ', error);
-            // };
-
-            // console.log('LoadImage', loadImg);
-
 
             const formData = new FormData();
             formData.append('senderId', myInfo.id);
@@ -316,21 +203,7 @@ const Messenger = () => {
             // dispatch(imgMessageSend(formData));
 
             let uid = new Date().getTime().toString(36) + Math.floor(new Date().valueOf() * Math.random());
-            // let status = ' ';
 
-            // if (socketMessage && currentFrnd) {
-            //     if (socketMessage.senderId === currentFrnd._id && socketMessage.receiverId === myInfo.id) {
-            //         status = 'seen';
-            //     } else {
-            //         status = 'delivered';
-            //     }
-            // } else {
-            //     status = 'unseen'
-            // }
-
-            // console.log('status', status)
-
-            // if (sendImage.length > 0) {
             const data = {
                 uid,
                 senderId: newData.senderId,
@@ -351,19 +224,16 @@ const Messenger = () => {
                 message: '',
                 image: newData.image,
                 time: new Date(),
-                // status: 'unseen',
                 status: 'unseen',
             })
 
             dispatch(imgMessageSend(data));
             setSendImage('');
-            console.log(data);
-            // }
-
+            // console.log(data);
         }
     }
 
-    // setTimeout(imageSend, 5000);
+    // <------------------------ SMS Send without Image -------------------------> //
 
     const sendMessage = e => {
         e.preventDefault();
@@ -400,12 +270,6 @@ const Messenger = () => {
             status: 'unseen',
         });
 
-        // console.log(currentFrnd);
-        // console.log('Check status:', myFriends && myFriends.includes(currentFrnd) ? 'seen' : myFriends && !myFriends.includes(currentFrnd) ? 'delivered' : 'unseen')
-        // console.log('Check status:', currentFrnd && currentFrnd._id === currentFrnd._id ? 'seen' : currentFrnd && currentFrnd._id === myInfo.id ? 'delivered' : 'unseen')
-
-
-
 
         socket.current.emit('typing', {
             senderId: myInfo.id,
@@ -419,16 +283,10 @@ const Messenger = () => {
         setNewMessage('');
 
 
-        console.log(data);
+        // console.log(data);
     }
 
-    // useEffect(() => {
-    //     fetch("https://fierce-bastion-47070.herokuapp.com/get-message")
-    //         .then(res => res.json())
-    //         .then(data => setLastSMSList(data.getAllMessage));
-    // }, []);
-
-    // console.log(lastSMSList);
+    // <------------------------------ Emoji SMS Send ---------------------------> //
 
     const emojiSend = emoji => {
         setNewMessage(`${newMessage}` + emoji);
@@ -441,6 +299,8 @@ const Messenger = () => {
         })
     };
 
+    // <----------------------------- Get All Friends ---------------------------> //
+
     useEffect(() => {
         dispatch(getFriends());
         // dispatch(getMessage(currentFrnd._id, myInfo.id));
@@ -449,44 +309,48 @@ const Messenger = () => {
         })
     }, [add_new_user]);
 
+
+    // <-------------------------- Set Currend Friend --------------------------> //
+
     useEffect(() => {
         if (friends && friends.length > 0) {
             setCurrentFrnd(myFriends[0]);
         }
     }, [friends]);
 
+    // <------------------------------ Get All Message --------------------------> //
+
     useEffect(() => {
         // console.log("Frnd ID:", currentFrnd._id, "My ID:", myInfo.id);
-        // dispatch(getMessage(currentFrnd._id, myInfo.id));
         dispatch(getMessage(currentFrnd._id, myInfo.id));
 
         if (socketSeen.senderId !== myInfo.id && socketSeen.status !== 'seen') {
             socket.current.emit('updateSeenSMS', socketSeen);
         }
 
-        // dispatch(seenSMS(socketSeen));
-        // if (myFriends.length > 0) {
-        //     dispatch({
-        //         type: 'UPDATE',
-        //         payload: {
-        //             sms: socketMessage
-        //         }
-        //     })
-        // }
     }, [currentFrnd?._id]);
+
+    // <------------------ Scroll auto Top to Bottom SMS Section ----------------> //
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [message]);
+
+    // <------------------------------- Handle Logout ---------------------------> //
 
     const logOut = () => {
         dispatch(userLogOut(myInfo));
         socket.current.emit('logout', myInfo);
     }
 
+    // <-------------------------- Load Theme White/Dark ------------------------> //
+
     useEffect(() => {
         dispatch(getTheme())
     }, []);
+
+
+    // <-------------------------- Friend Search Section ------------------------> //
 
     const searchFrnd = e => {
         // console.log(e.target.value);

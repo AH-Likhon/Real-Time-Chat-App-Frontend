@@ -19,8 +19,6 @@ const tokenDecode = (token) => {
     return tokenDecoded;
 }
 
-// const [ token, setToken ] = React.useState()
-
 export const authReducer = (state = authState, action) => {
     const { payload, type } = action;
 
@@ -73,20 +71,6 @@ export const authReducer = (state = authState, action) => {
         }
     }
 
-    // if( type === REGISTER_SUCCESS ){
-
-    //    return {
-    //     ...state,
-    //     myInfo: payload.token,
-    //     successMessage: payload.successMessage,
-    //     error: '',
-    //     authenticate: true,
-    //     loading: false
-    //    }
-    // }
-
-
-
     if (type === SUCCESS_MESSAGE_CLEAR) {
         return {
             ...state,
@@ -100,16 +84,6 @@ export const authReducer = (state = authState, action) => {
             error: ''
         }
     }
-
-    // if( type === USER_LOGIN_FAIL ){
-    //     return {
-    //         ...state,
-    //         error : payload.error,
-    //         authenticate : false,
-    //         myInfo : '',
-    //         loading : true
-    //     }
-    // }
 
     if (type === LOGOUT_SUCCESS) {
         return {

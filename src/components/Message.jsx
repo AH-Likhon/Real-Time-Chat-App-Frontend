@@ -3,7 +3,6 @@ import React from 'react';
 import { HiOutlineCheckCircle } from 'react-icons/hi';
 import { RiCheckboxCircleFill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-// import image from "../../src/images/image.jpg"
 
 const Message = ({ message, currentFrnd, scrollRef, typing }) => {
     const { myInfo } = useSelector(state => state.auth);

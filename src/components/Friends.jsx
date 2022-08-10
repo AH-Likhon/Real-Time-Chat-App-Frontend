@@ -1,6 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { BsCheck2All } from 'react-icons/bs';
+import React from 'react';
 import { HiOutlineCheckCircle } from 'react-icons/hi';
 import { RiCheckboxCircleFill } from 'react-icons/ri';
 
@@ -9,28 +8,6 @@ const Friends = ({ friend, sms, myId, activeUser }) => {
     let lsms = sms.filter((m => (m.senderId === myId && m.receiverId === friend._id) || (m.senderId === friend._id && m.receiverId === myId))).slice(-1)[0];
 
     // console.log(activeUser);
-
-    // const [allMessage, setAllMessage] = useState([])
-
-    // // const response = 
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         fetch("https://fierce-bastion-47070.herokuapp.com/get-message")
-    //             .then(res => res.json())
-    //             .then(data => setAllMessage(data.getAllMessage));
-    //     }, 1000)
-    // }, []);
-
-    // let lsms = {};
-
-    // if (allMessage && allMessage.length >= 0) {
-    // let lsms = allMessage?.filter((m => (m.senderId === myId && m.receiverId === friend._id) || (m.senderId === friend._id && m.receiverId === myId)));
-    // };
-    // console.log(allMessage);
-    // console.log(lsms);
-    // console.log(friend);
-    // console.log(senderName)
 
     return (
         <div className="friend">
@@ -76,7 +53,6 @@ const Friends = ({ friend, sms, myId, activeUser }) => {
                             }
                         </div> :
                         <div className='seen-unseen'>
-                            {/* <div className='seen-icon'></div> */}
                             {
                                 lsms?.status !== undefined && lsms?.status !== 'seen' ? <div className='seen-icon'></div> : ''
                             }

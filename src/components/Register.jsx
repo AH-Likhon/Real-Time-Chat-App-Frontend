@@ -28,10 +28,11 @@ const Register = () => {
     });
 
     const [click, setClick] = useState(true);
-    console.log(click);
+    // console.log(click);
 
     const [loadImage, setLoadImage] = useState('');
 
+    // <-------------------------- Input handle from Form -----------------------> //
     const inputHendle = (e) => {
         setstate({
             ...state,
@@ -39,72 +40,25 @@ const Register = () => {
         })
     }
 
+    // <---------------------------- User Image Upload --------------------------> //
     const fileHandle = e => {
         if (e.target.files.length !== 0) {
-
-            // function getBase64(file) {
-            //     return new Promise((resolve, reject) => {
-            //       const reader = new FileReader();
-            //       reader.readAsDataURL(file);
-            //       reader.onload = () => resolve(reader.result);
-            //       reader.onerror = error => reject(error);
-            //     });
-            //   }
-
-            // let base64Image = getBase64(e.target.files[0]).then(
-            //     data => data
-            //   );
-
-            // function getDataUrl(img) {
-            //     // Create canvas
-            //     const canvas = document.createElement('canvas');
-            //     const ctx = canvas.getContext('2d');
-            //     // Set width and height
-            //     canvas.width = img.width;
-            //     canvas.height = img.height;
-            //     // Draw the image
-            //     ctx.drawImage(img, 0, 0);
-            //     return canvas.toDataURL('image/*');
-            //  }
-
-            //  const dataUrl = getDataUrl(e.target.files[0]);
-            //  console.log(dataUrl);
-
-            // function encodeImageFileAsURL(e) {
-            //     const file = e.target.files[0];
-            //     const reader = new FileReader();
-            //     reader.readAsDataURL(file);
-            //     reader.onloadend = () => {
-            //         return reader.result;
-            //     } 
-
-            //     //   console.log('RESULT', reader.result);
-            //     // console.log('RESULT', reader.result);
-            //   }
-
-            //   console.log(encodeImageFileAsURL(e));
-
-            //   console.log("Result", e.target.name);
-
             setstate({
                 ...state,
                 [e.target.name]: e.target.files[0]
             })
-        }
-
+        };
         const reader = new FileReader();
-
         reader.onload = () => {
             setLoadImage(reader.result);
         }
-
-
         reader.readAsDataURL(e.target.files[0]);
 
     }
 
     // console.log('result', loadImage);
 
+    // <------------------------------- Submit Data ---------------------------> //
     const register = e => {
 
         const { userName, email, password, confirmPassword } = state;
@@ -121,10 +75,6 @@ const Register = () => {
 
         // console.log(loadImage);
 
-        // let newData = {};
-
-        //    const newData = formData.forEach(el => el);
-
         var newData = {};
         formData.forEach(function (value, key) {
             newData[key] = value;
@@ -139,48 +89,23 @@ const Register = () => {
 
     useEffect(() => {
 
-        // if(!click){
-
-        // }else{
-        //     alert.removeAll();
-        // }
-
         if (authenticate && successMessage) {
             history('/login');
             // history('/messenger');
             console.log('Registration State', state);
-            // dispatch(userLogin(state));
         }
 
         if (!click && successMessage) {
             alert.success(successMessage);
-            dispatch({ type: SUCCESS_MESSAGE_CLEAR })
-            // alert.remove(successMessage);
-            // alert.removeAll()
+            dispatch({ type: SUCCESS_MESSAGE_CLEAR });
         }
 
         if (!click && error) {
             alert.error(error);
-            dispatch({ type: ERROR_CLEAR })
-            // alert.remove(error);
-            // alert.removeAll()
+            dispatch({ type: ERROR_CLEAR });
         }
 
-    }, [successMessage, error])
-
-    // useEffect(()=>{
-    //     if(authenticate){
-    //         history.push('/')
-    //     }
-    //     if(successMessage){
-    //         alert.success(successMessage);
-    //         dispatch({type : SUCCESS_MESSAGE_CLEAR})
-    //     }
-    //     if(error){
-    //         error.map(err=>alert.error(err));
-    //         dispatch({type : ERROR_CLEAR})
-    //     }
-    // },[successMessage,error])
+    }, [successMessage, error]);
 
     return (
         <div className="register">

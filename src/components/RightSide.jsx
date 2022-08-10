@@ -1,5 +1,4 @@
 import React from 'react';
-import myImage from '../images/image.jpg';
 import { IoCall } from 'react-icons/io5';
 import { BsCameraVideoFill } from 'react-icons/bs';
 import { HiDotsCircleHorizontal } from 'react-icons/hi';

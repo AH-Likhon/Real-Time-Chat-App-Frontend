@@ -21,10 +21,12 @@ const Login = () => {
 
     const [state, setState] = useState({ email: '', password: '' });
 
+    // <-------------------------- Handle OnChange Input ------------------------> //
     const handleChange = e => {
         setState({ ...state, [e.target.name]: e.target.value })
     }
 
+    // <---------------------------- Submit Login Data --------------------------> //
     const login = e => {
         e.preventDefault();
 

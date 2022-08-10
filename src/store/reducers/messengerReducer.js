@@ -6,8 +6,6 @@ const messengerState = {
     message: [],
     themeMode: '',
     add_new_user: ''
-    // allMessage: []
-    // smsSendSuccess: false
 }
 
 export const messengerReducer = (state = messengerState, action) => {
@@ -25,18 +23,14 @@ export const messengerReducer = (state = messengerState, action) => {
     if (type === MESSAGE_GET_SUCCESS) {
         return {
             ...state,
-            message: payload.message,
-            // message: payload.allMessage,
-            // allMessage: payload.allMessage,
-            // lastSMS: payload.lastSMS
+            message: payload.message
         }
     }
 
     if (type === MESSAGE_SEND_SUCCESS) {
         return {
             ...state,
-            // smsSendSuccess: true,
-            message: [...state.message, payload.message],
+            message: [...state.message, payload.message]
         }
     }
 
@@ -49,7 +43,7 @@ export const messengerReducer = (state = messengerState, action) => {
 
     if (type === SEEN_SMS) {
 
-        console.log(state.message.findIndex(m => m.uid === payload.sms.uid));
+        // console.log(state.message.findIndex(m => m.uid === payload.sms.uid));
         const index = state.message.findIndex(m => m.uid === payload.sms.uid);
 
         if (index !== -1) {
@@ -60,15 +54,11 @@ export const messengerReducer = (state = messengerState, action) => {
                 // message: [...state.message]
             };
         }
-        // else {
-        //     console.log(state.message);
-        //     return state;
-        // }
     }
 
     if (type === DELIVERED_SMS) {
 
-        console.log(state.message.findIndex(m => m.uid === payload.sms.uid));
+        // console.log(state.message.findIndex(m => m.uid === payload.sms.uid));
         const index = state.message.findIndex(m => m.uid === payload.sms.uid);
 
         if (index !== -1) {
@@ -79,13 +69,6 @@ export const messengerReducer = (state = messengerState, action) => {
                 // message: [...state.message]
             };
         }
-        // else {
-        //     console.log(state.message);
-        //     return {
-        //         ...state,
-        //         message: [...state.message, payload.sms]
-        //     };
-        // }
     }
 
     if (type === UPDATE) {
@@ -128,24 +111,6 @@ export const messengerReducer = (state = messengerState, action) => {
             add_new_user: ''
         }
     }
-
-    // if (type === DELIVERED_SMS) {
-    //     // const seenSms = state.message.filter(m => (m.senderId === payload.sms.senderId && m.receiverId === payload.sms.receiverId) || (m.senderId === payload.sms.receiverId && m.receiverId === payload.sms.senderId));
-
-    //     // console.log(payload.sms);
-    //     if (state.message.includes(payload.sms)) {
-    //         return {
-    //             ...state,
-    //             message: [...state.message]
-    //         }
-    //     } else {
-    //         return {
-    //             ...state,
-    //             message: [...new Set(state.message), payload.sms]
-    //         }
-    //     }
-
-    // }
 
     return state;
 } 

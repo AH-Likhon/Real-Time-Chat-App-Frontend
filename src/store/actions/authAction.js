@@ -1,75 +1,13 @@
 import axios from 'axios';
-// import { dispatch } from 'react-hot-toast/dist/core/store';
 import { LOGOUT_SUCCESS, REGISTER_FAIL, REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS } from '../types/authType';
-// import {
-//     REGISTER_FAIL,
-//     REGISTER_SUCCESS,
-//     USER_LOGIN_SUCCESS,
-//     USER_LOGIN_FAIL
-// } from "../types/authType";
+
+
+// <------------------------------ Registration Action --------------------------> //
 
 export const userRegister = (data) => {
 
     return async dispatch => {
-        console.log(data);
-        // const formData = { };
-        // data.forEach(el => console.log(el));
-
-        // console.log(formData);
-
-        // let { email } = data;
-
-        // const token = data;
-
-        // let authToken = new Array();
-
-        // fetch('https://fierce-bastion-47070.herokuapp.com/users', {
-        //     method: 'POST',
-        //     headers: { "content-type": "application/json" },
-        //     body: JSON.stringify(data),
-        // })
-        // .then(res => res.json())
-        // .then(data => {
-        //     if(data.insertedId){
-        //         console.log("Success:", data);
-
-        //         // let authToken = JSON.parse(localStorage.getItem("authToken")) ? JSON.parse(localStorage.getItem("authToken")) : [];
-
-        //         // authToken.push(token);
-
-        //         localStorage.setItem('authToken', JSON.stringify(token));
-
-        //         // let setToken;
-
-        //         // fetch(`users/${token.email}`)
-        //         // .then(res => res.json())
-        //         // .then(data => {
-        //         //     if(new Date() > data.expires){
-        //         //         setToken = { };
-        //         //     }else{
-        //         //         setToken = data;
-        //         //     }
-        //         // })
-
-        //         dispatch({
-        //             type: REGISTER_SUCCESS,
-        //             payload: {
-        //                 successMessage: 'Successfully registered',
-        //                 token: token
-        //             }
-        //         })
-        //     }
-        //     else{
-        //         console.log('Error:', data.error);
-        //         dispatch({
-        //             type: REGISTER_FAIL,
-        //             payload: {
-        //                 error: data.error
-        //             }
-        //         })
-        //     }
-        //     // console.log(JSON.parse(data));
-        // })
+        // console.log(data);
 
         const config = {
             headers: {
@@ -79,9 +17,7 @@ export const userRegister = (data) => {
         try {
             const response = await axios.post('https://fierce-bastion-47070.herokuapp.com/users', data, config);
 
-            // await axios.post('https://fierce-bastion-47070.herokuapp.com/login', data, config);
-
-            console.log(response.data);
+            // console.log(response.data);
 
             if (response.data.error) {
                 dispatch({
@@ -107,16 +43,12 @@ export const userRegister = (data) => {
 
 
         } catch (error) {
-            // dispatch({
-            //     type: REGISTER_FAIL,
-            //     payload: {
-            //         error: error.response.data.error.errorMessage
-            //     }
-            // })
-            console.log(error);
+            // console.log(error);
         }
     }
 }
+
+// <------------------------------------ Login Action ---------------------------> //
 
 export const userLogin = (data) => {
 
@@ -134,8 +66,7 @@ export const userLogin = (data) => {
         try {
             const response = await axios.post('https://fierce-bastion-47070.herokuapp.com/login', data, config);
 
-            // response.set("Access-Control-Allow-Origin", "*");
-            console.log(response.data);
+            // console.log(response.data);
 
             if (response.data.error) {
                 dispatch({
@@ -159,54 +90,12 @@ export const userLogin = (data) => {
             }
 
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     }
 }
 
-// export const userLogin = (data) => {
-//     return async (dispath) => {
-
-//         const config = {
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         }
-
-//         try {
-//             const response = await axios.post('/api/messenger/login', data, config);
-//             localStorage.setItem('authToken', response.data.token);
-//             dispath({
-//                 type: USER_LOGIN_SUCCESS,
-//                 payload: {
-//                     successMessage: response.data.successMessage,
-//                     token: response.data.token
-//                 }
-//             })
-//         } catch (error) {
-//             dispath({
-//                 type: USER_LOGIN_FAIL,
-//                 payload: {
-//                     error: error.response.data.error.errorMessage
-//                 }
-//             })
-//         }
-//     }
-// }
-
-// export const userLogout = ()=>async(dispatch)=>{
-//     try {
-//         const response = await axios.post('/api/messenger/user-logout');
-//         if(response.data.success){
-//             localStorage.removeItem('authToken');
-//             dispatch({
-//                 type : 'LOGOUT_SUCCESS',
-//             })
-//         }
-//     } catch (error) {
-
-//     }
-// }
+// <---------------------------------- Logout Action ----------------------------> //
 
 export const userLogOut = (data) => async (dispatch) => {
     console.log("logout", data);
@@ -215,20 +104,12 @@ export const userLogOut = (data) => async (dispatch) => {
 
         const res = await axios.delete(`https://fierce-bastion-47070.herokuapp.com/logout/${data.id}`);
 
-        console.log(res.data);
+        // console.log(res.data);
         localStorage.removeItem('authToken');
         dispatch({
             type: LOGOUT_SUCCESS
         })
-
-        // if (res.data.successMessage) {
-        //     localStorage.removeItem('authToken');
-        //     localStorage.removeItem('authToken');
-        //     dispatch({
-        //         type: LOGOUT_SUCCESS
-        //     })
-        // }
     } catch (error) {
-
+        // console.log(error);
     }
 }

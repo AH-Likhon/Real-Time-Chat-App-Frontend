@@ -1,5 +1,4 @@
 import React from 'react';
-import myImage from '../images/image.jpg';
 import { BsChevronDown } from 'react-icons/bs';
 
 const FriendInfo = (props) => {

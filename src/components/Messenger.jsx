@@ -54,7 +54,7 @@ const Messenger = () => {
     // <-------------------------- Socket Connection --------------------------> //
 
     useEffect(() => {
-        socket.current = io('https://fierce-bastion-47070.herokuapp.com');
+        socket.current = io('https://real-time-chat-backend.onrender.com');
         socket.current.on('getMessage', data => {
             setSocketMessage(data);
         })

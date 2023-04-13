@@ -76,7 +76,7 @@ export const messengerReducer = (state = messengerState, action) => {
 
         if (index !== -1) {
             state.message[index] = payload.sms;
-            console.log(state.message);
+            // console.log(state.message);
             return {
                 ...state
             };
